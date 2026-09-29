@@ -1,542 +1,4380 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coppie di Opposti — Analisi Target</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#dcdaf0">
+<title>CEnTRO · Questionario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root{
+  --page:#F5F5F7; --card:#fff; --ink:#161616; --ink-soft:#3a3a3a; --muted:#7b7b85;
+  --line:rgba(20,20,20,.09); --line-strong:rgba(20,20,20,.16);
+  --n1:#F06139; --n2:#D43998; --n3:#BB2DCE; --n4:#8B1EBA; --n5:#471EBA; --n6:#1E42BA;
+  --grad:linear-gradient(90deg,#F06139 0%,#D43998 23%,#BB2DCE 44%,#8B1EBA 64%,#471EBA 79%,#1E42BA 97%);
+  --accent:#471EBA; --ok:#1f9d63; --warn:#d98a12; --bad:#d2453c;
+  --shadow:0 10px 30px rgba(30,40,70,.10); --shadow-sm:0 4px 12px rgba(30,40,70,.08);
+  --r:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#E9E9EE;color:var(--ink);
+  font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+#app{position:relative;width:100%;max-width:480px;height:100dvh;margin:0 auto;display:flex;flex-direction:column;
+  background:radial-gradient(circle at 1px 1px,rgba(20,20,20,.06) 1px,transparent 1.6px) 0 0/28px 28px,var(--page);
+  overflow:hidden;box-shadow:0 0 60px rgba(20,20,40,.12)}
 
-  :root {
-    --bg: #0e0e0f;
-    --surface: #161618;
-    --surface2: #1e1e21;
-    --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.18);
-    --text: #f0ede8;
-    --muted: #6b6a72;
-    --accent: #c8f060;
-    --accent2: #60c8f0;
-    --accent3: #f060c8;
-    --font-display: 'Syne', sans-serif;
-    --font-mono: 'DM Mono', monospace;
-  }
+/* ---------- città ---------- */
+.cityWrap{position:relative;flex:0 0 auto;height:clamp(150px,29dvh,240px);background:#dcdaf0;overflow:hidden;touch-action:pan-y;
+  transition:height .5s cubic-bezier(.2,.8,.2,1)}
+.cityWrap.tall{height:clamp(190px,36dvh,300px)}
+#city{width:100%;height:100%;display:block}
+.hud{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;pointer-events:none}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);border-radius:999px;
+  padding:6px 11px;font-size:12px;font-weight:700;color:var(--ink-soft);box-shadow:var(--shadow-sm)}
+.chip b{color:var(--ink)}
+.grow{transform-box:fill-box;transform-origin:50% 100%;transition:transform .8s cubic-bezier(.2,.9,.25,1)}
+.crane{transition:transform .8s cubic-bezier(.2,.9,.25,1),opacity .4s}
+.win{fill:#fff;fill-opacity:.32;transition:fill .6s,fill-opacity .6s}
+.win.lit{fill:#FFD98A;fill-opacity:1}
+.lamp{fill:#fff;fill-opacity:.4;transition:all .5s}.lamp.lit{fill:#FFD98A;fill-opacity:1}
+.pop{animation:pop .5s ease}
+@keyframes pop{0%{filter:brightness(1)}40%{filter:brightness(1.28)}100%{filter:brightness(1)}}
+.cloud{animation:drift 60s linear infinite}
+@keyframes drift{from{transform:translateX(-40px)}to{transform:translateX(300px)}}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-mono);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* ---------- stage ---------- */
+.top{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:10px 14px 0}
+.iconbtn{width:38px;height:38px;border-radius:12px;background:#fff;box-shadow:var(--shadow-sm);display:grid;place-items:center;flex:0 0 auto}
+.iconbtn:disabled{opacity:.35}
+.iconbtn svg{width:20px;height:20px}
+.topmid{flex:1;min-width:0}
+.topmid .t{font-size:12px;font-weight:800;letter-spacing:.02em;color:var(--muted);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:6px;border-radius:9px;background:rgba(20,20,20,.08);margin-top:6px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;border-radius:9px;background:var(--grad);background-size:480px 100%;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.stage{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:14px 14px 0;scroll-behavior:smooth}
+.view{animation:in .35s cubic-bezier(.2,.8,.2,1) both;display:flex;flex-direction:column;min-height:100%}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 18px}
+.grow1{flex:1}
+h1{font-size:26px;line-height:1.15;margin:4px 0 8px;letter-spacing:-.02em}
+h2{font-size:20px;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
+h3{font-size:14px;margin:0 0 4px}
+p{margin:0 0 10px;line-height:1.45;color:var(--ink-soft)}
+.muted{color:var(--muted)}.small{font-size:12.5px}
+.kicker{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.qtext{font-size:21px;line-height:1.3;font-weight:700;letter-spacing:-.01em;margin:10px 0 22px;min-height:82px}
+.foot{position:sticky;bottom:0;margin:14px -14px 0;padding:12px 14px calc(14px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--page) 70%,rgba(245,245,247,0))}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:16px;font-weight:800;font-size:16px;
+  color:#fff;background:var(--grad);box-shadow:0 8px 20px rgba(71,30,186,.28);transition:transform .15s,opacity .2s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.35;box-shadow:none}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)}
+.btn.sm{height:42px;font-size:14px;border-radius:13px;width:auto;padding:0 16px}
+.row{display:flex;gap:10px}.row>*{flex:1}
 
-  /* Header */
-  header {
-    padding: 4rem 3rem 2rem;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-  }
+/* ---------- scelta aree ---------- */
+.part{margin:18px 2px 8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.part span{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.part button{font-size:12px;font-weight:800;color:var(--accent)}
+.area{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow-sm);
+  border:2px solid transparent;width:100%;text-align:left;transition:border-color .2s,transform .12s}
+.area:active{transform:scale(.99)}
+.area.on{border-color:var(--accent)}
+.chk{width:24px;height:24px;border-radius:8px;border:2px solid var(--line-strong);display:grid;place-items:center;flex:0 0 auto;transition:.2s}
+.area.on .chk{background:var(--accent);border-color:var(--accent)}
+.chk svg{width:14px;height:14px;stroke:#fff;opacity:0}.area.on .chk svg{opacity:1}
+.area .nm{font-weight:800;font-size:15px}.area .ds{font-size:12.5px;color:var(--muted);margin-top:1px}
+.area .st{margin-left:auto;font-size:11.5px;font-weight:800;color:var(--muted);text-align:right;white-space:nowrap}
+.area .st.done{color:var(--ok)}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line)}
+.toggle:last-child{border:0}
+.toggle .tt{font-weight:700;font-size:14px}.toggle .td{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.35}
+.sw{position:relative;width:46px;height:28px;border-radius:99px;background:#cfcfd6;flex:0 0 auto;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25);transition:.2s}
+.sw.on{background:var(--accent)}.sw.on::after{transform:translateX(18px)}
 
-  header::before {
-    content: '';
-    position: absolute;
-    top: -60px; left: -60px;
-    width: 320px; height: 320px;
-    background: radial-gradient(circle, rgba(200,240,96,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+/* ---------- scala (slider + faccine) ---------- */
+.scale{position:relative;user-select:none;-webkit-user-select:none;touch-action:pan-y;outline:none;padding-bottom:4px}
+.faces{display:grid;grid-template-columns:repeat(5,1fr)}
+.face{display:grid;place-items:center;padding:4px 0;transition:transform .25s cubic-bezier(.3,1.6,.5,1),opacity .2s;opacity:.85}
+.face svg{width:min(50px,15vw);height:min(50px,15vw);overflow:visible}
+.face.sel{transform:scale(1.28) translateY(-3px);opacity:1}
+.face .n{font-size:15px;font-weight:800;color:var(--muted);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line-strong);background:#fff}
+.face.sel .n{color:#fff;border-color:transparent}
+.rail{position:relative;height:30px;margin:2px 10% 0}
+.rail::before{content:"";position:absolute;left:0;right:0;top:13px;height:5px;border-radius:9px;background:rgba(20,20,20,.1)}
+.fill{position:absolute;left:0;top:13px;height:5px;border-radius:9px;background:var(--grad);background-size:400px 100%;width:0;transition:width .25s cubic-bezier(.2,.8,.2,1)}
+.dot{position:absolute;top:10px;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;background:#fff;border:2px solid var(--line-strong)}
+.thumb{position:absolute;top:3px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:#fff;border:3px solid var(--accent);
+  box-shadow:0 4px 12px rgba(71,30,186,.35);opacity:0;transform:scale(.4);transition:left .22s cubic-bezier(.2,.9,.3,1.2),opacity .2s,transform .2s}
+.scale.has .thumb{opacity:1;transform:none}
+.scale.drag .thumb{transition:opacity .2s,transform .2s;transform:scale(1.15)}
+.scale.drag .fill{transition:none}
+.ends{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);margin-top:6px;gap:12px}
+.ends span:last-child{text-align:right}
+.pill{display:block;text-align:center;margin:18px auto 0;min-height:34px;font-weight:800;font-size:16px;color:var(--ink)}
+.pill.empty{color:var(--muted);font-weight:600;font-size:14px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 14px;border-radius:15px;background:#fff;border:2px solid var(--line);
+  margin-bottom:9px;font-weight:700;font-size:15.5px;line-height:1.25;transition:.15s}
+.opt:active{transform:scale(.99)}
+.opt .rd{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-strong);flex:0 0 auto;display:grid;place-items:center}
+.opt.multi .rd{border-radius:7px}
+.opt.sel{border-color:var(--accent);background:rgba(71,30,186,.06)}
+.opt.sel .rd{background:var(--accent);border-color:var(--accent)}
+.opt .rd svg{width:12px;height:12px;stroke:#fff;opacity:0}.opt.sel .rd svg{opacity:1}
+.hint{font-size:12.5px;color:var(--muted);margin:-8px 0 12px}
+.shake{animation:shake .35s}
+@keyframes shake{20%{transform:translateX(-6px)}50%{transform:translateX(6px)}80%{transform:translateX(-3px)}}
+textarea{width:100%;min-height:160px;border-radius:15px;border:2px solid var(--line);padding:14px;font:inherit;font-size:16px;resize:vertical;background:#fff;outline:none}
+textarea:focus{border-color:var(--accent)}
 
-  .header-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
+/* ---------- griglia interessi ---------- */
+.int{background:#fff;border-radius:16px;padding:12px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+.int .h{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:15px;margin-bottom:9px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.seg button{border-radius:11px;padding:9px 2px;font-size:11.5px;font-weight:800;background:#f0f0f4;color:var(--ink-soft);line-height:1.15;transition:.15s}
+.seg button.sel{color:#fff}
+.subs{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.subs button{padding:6px 11px;border-radius:99px;font-size:12.5px;font-weight:700;background:#f0f0f4}
+.subs button.sel{background:rgba(71,30,186,.12);color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.subs .lbl{font-size:12px;color:var(--muted);width:100%}
 
-  h1 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    color: var(--text);
-    margin-bottom: 0.6rem;
-  }
+/* ---------- celebrazione blocco ---------- */
+.big{font-size:56px;line-height:1;margin:6px 0}
+.center{text-align:center}
+.stats{display:flex;gap:8px;margin:14px 0}
+.stat{flex:1;background:#f6f6f9;border-radius:14px;padding:10px 6px;text-align:center}
+.stat b{display:block;font-size:19px}.stat span{font-size:11.5px;color:var(--muted);font-weight:700}
 
-  .header-sub {
-    font-size: 13px;
-    color: var(--muted);
-    max-width: 480px;
-    line-height: 1.7;
-  }
+/* ---------- sommario ---------- */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;margin:0 -14px;padding-left:14px;padding-right:14px;scrollbar-width:none;position:sticky;top:-14px;z-index:5;
+  background:linear-gradient(to bottom,var(--page) 80%,rgba(245,245,247,0))}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:9px 15px;border-radius:99px;background:#fff;font-weight:800;font-size:13.5px;box-shadow:var(--shadow-sm)}
+.tab.on{background:var(--ink);color:#fff}
+.sec{margin:0 0 16px}
+.sec>h2{margin:18px 2px 8px}
+.sc{background:#fff;border-radius:16px;padding:14px 14px 12px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+.sc .hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sc .nm{font-weight:800;font-size:15px}
+.sc .val{font-weight:800;font-size:14px;color:var(--muted)}
+.sc .ds{font-size:12.5px;color:var(--muted);margin:2px 0 10px;line-height:1.35}
+.track{position:relative;height:10px;border-radius:9px;background:linear-gradient(90deg,rgba(240,97,57,.22),rgba(187,45,206,.18),rgba(30,66,186,.22));margin:14px 0 8px}
+.track::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1.5px;background:rgba(20,20,20,.22)}
+.mk{position:absolute;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:var(--ink);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);transition:left .8s cubic-bezier(.2,.9,.25,1)}
+.mk.ideal{background:#fff;border:3px solid var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.mk.low{background:repeating-linear-gradient(45deg,#9a9aa4 0 3px,#fff 3px 6px);}
+.poles{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:700;color:var(--ink-soft)}
+.poles span:last-child{text-align:right}
+.band{font-size:13px;font-weight:700;margin-top:8px}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;background:#f0f0f4;color:var(--muted);margin-left:4px;vertical-align:1px}
+.tag.ok{background:rgba(31,157,99,.12);color:var(--ok)}.tag.warn{background:rgba(217,138,18,.14);color:var(--warn)}.tag.bad{background:rgba(210,69,60,.12);color:var(--bad)}
+.na{color:var(--muted);font-size:13px;font-style:italic}
+.ans{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;padding:11px 4px;border-bottom:1px solid var(--line)}
+.ans .c{flex:0 0 46px;font-size:11.5px;font-weight:800;color:var(--muted);padding-top:2px}
+.ans .q{flex:1;font-size:14px;line-height:1.35;font-weight:600}
+.ans .a{display:block;margin-top:3px;font-weight:800;color:var(--accent);font-size:13.5px}
+.ans .a em{font-style:normal;color:var(--muted);font-weight:700}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}.dots i{width:9px;height:9px;border-radius:50%;background:#dcdce3}.dots i.on{background:var(--ink)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border:0}.kv span:first-child{color:var(--muted);font-weight:600}.kv span:last-child{font-weight:800;text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.chips span{padding:5px 10px;border-radius:99px;background:#f0f0f4;font-size:12.5px;font-weight:700}
+.note{background:#fff8e8;border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.4;color:#6b5514;margin:10px 0}
+.summary-lead{font-size:16px;line-height:1.5;color:var(--ink)}
+.pad{height:24px}
 
-  .header-count {
-    position: absolute;
-    right: 3rem; top: 4rem;
-    font-family: var(--font-display);
-    font-size: clamp(4rem, 10vw, 7rem);
-    font-weight: 800;
-    color: rgba(255,255,255,0.04);
-    letter-spacing: -0.05em;
-    line-height: 1;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  /* Controls */
-  .controls {
-    padding: 1.5rem 3rem;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    background: rgba(14,14,15,0.95);
-    backdrop-filter: blur(12px);
-    z-index: 100;
-  }
-
-  .search-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 200px;
-  }
-
-  .search-wrap svg {
-    position: absolute;
-    left: 14px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
-    pointer-events: none;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 10px 14px 10px 40px;
-    border-radius: 6px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  input[type="text"]:focus { border-color: var(--accent); }
-  input[type="text"]::placeholder { color: var(--muted); }
-
-  .btn-export {
-    background: var(--accent);
-    color: #0e0e0f;
-    border: none;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    padding: 10px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-    white-space: nowrap;
-  }
-
-  .btn-export:hover { opacity: 0.85; }
-  .btn-export:active { transform: scale(0.97); }
-
-  /* Category tabs */
-  .cat-tabs {
-    padding: 1rem 3rem;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .cat-tab {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-
-  .cat-tab:hover { border-color: var(--border-hover); color: var(--text); }
-
-  .cat-tab.active {
-    background: var(--accent);
-    color: #0e0e0f;
-    border-color: var(--accent);
-    font-weight: 500;
-  }
-
-  /* Status bar */
-  .statusbar {
-    padding: 0.6rem 3rem;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .statusbar span { color: var(--accent); }
-
-  /* Main grid */
-  main {
-    padding: 2rem 3rem 4rem;
-  }
-
-  .section { margin-bottom: 2.5rem; }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1rem;
-  }
-
-  .section-label {
-    font-family: var(--font-display);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .section-num {
-    font-size: 11px;
-    color: var(--border-hover);
-    font-family: var(--font-mono);
-  }
-
-  .pairs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 6px;
-  }
-
-  .pair {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px 16px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 10px;
-    transition: border-color 0.2s, background 0.2s;
-    cursor: default;
-  }
-
-  .pair:hover {
-    border-color: var(--border-hover);
-    background: var(--surface2);
-  }
-
-  .pair.highlight { border-color: rgba(200,240,96,0.4); background: rgba(200,240,96,0.04); }
-
-  .pole {
-    font-size: 12.5px;
-    line-height: 1.4;
-    color: var(--text);
-  }
-
-  .pole.left { text-align: right; }
-  .pole.right { text-align: left; }
-
-  .separator {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    flex-shrink: 0;
-  }
-
-  .sep-dot {
-    width: 3px; height: 3px;
-    border-radius: 50%;
-    background: var(--muted);
-  }
-
-  .sep-line {
-    width: 12px;
-    height: 1px;
-    background: var(--border-hover);
-  }
-
-  /* Empty state */
-  .empty {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: var(--muted);
-    font-size: 13px;
-    display: none;
-  }
-
-  .empty.show { display: block; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
-
-  @media (max-width: 600px) {
-    header, .controls, .cat-tabs, .statusbar, main { padding-left: 1.25rem; padding-right: 1.25rem; }
-    header { padding-top: 2rem; }
-    .header-count { display: none; }
-    .pairs-grid { grid-template-columns: 1fr; }
-  }
 </style>
 </head>
 <body>
-
-<header>
-  <p class="header-eyebrow">/ Analisi target /</p>
-  <h1>Coppie<br>di opposti</h1>
-  <p class="header-sub">Mappa delle dimensioni comportamentali, demografiche e psicografiche per la definizione del target.</p>
-  <div class="header-count" id="total-count">0</div>
-</header>
-
-<div class="controls">
-  <div class="search-wrap">
-    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="search" placeholder="Cerca tra le coppie..." oninput="render()" />
+<div id="app">
+  <div class="cityWrap tall" id="cityWrap"><svg id="city" aria-hidden="true"></svg><div class="hud" id="hud"></div></div>
+  <div class="top">
+    <button class="iconbtn" id="backBtn" aria-label="Indietro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="topmid"><div class="t" id="topTitle"></div><div class="bar"><i id="topBar"></i></div></div>
+    <button class="iconbtn" id="menuBtn" aria-label="Scegli le aree"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
-  <button class="btn-export" onclick="exportCsv()">↓ Esporta CSV</button>
+  <main class="stage" id="stage"></main>
 </div>
-
-<div class="cat-tabs" id="cat-tabs"></div>
-<div class="statusbar" id="statusbar"></div>
-
-<main id="main"></main>
-<div class="empty" id="empty">Nessuna coppia trovata per questa ricerca.</div>
-
 <script>
-const DATA = [
-  { cat: "Stile di vita", pairs: [
-    ["Interno","Esterno (casa vs uscire)"],
-    ["Sedentari","Sportivi"],
-    ["Nottambuli","Mattinieri"],
-    ["Minimalisti","Accumulatori"],
-    ["Routinari","Avventurosi"],
-    ["Salutisti","Indulgenti (cibo e abitudini)"],
-    ["Vegetariani / vegani","Onnivori"],
-    ["Astemi","Bevitori occasionali"],
-    ["Non fumatori","Fumatori"],
-    ["Meditatori","Non praticanti mindfulness"],
-    ["Eco-sostenibili","Disinteressati all'ambiente"],
-    ["Slow life","Fast life"],
-  ]},
-  { cat: "Personalità & socialità", pairs: [
-    ["Introversi","Estroversi"],
-    ["Emotivi","Razionali"],
-    ["Impulsivi","Riflessivi"],
-    ["Ottimisti","Pessimisti"],
-    ["Conformisti","Anticonformisti"],
-    ["Competitivi","Collaborativi"],
-    ["Ambiziosi","Appagati del presente"],
-    ["Ordinati","Caotici"],
-    ["Empatici","Pragmatici"],
-    ["Leader naturali","Follower"],
-    ["Curiosi","Disinteressati"],
-    ["Creativi","Analitici"],
-    ["Solitari","Gregari"],
-    ["Fiduciosi","Diffidenti"],
-  ]},
-  { cat: "Tecnologia & digitale", pairs: [
-    ["Digitali","Analogici"],
-    ["Esperti tech","Inesperti tech"],
-    ["Early adopter","Tardi adottanti"],
-    ["Mobile-first","Desktop-first"],
-    ["Utenti iOS","Utenti Android"],
-    ["Dipendenti dallo smartphone","Low-digital"],
-    ["Gamer","Non gamer"],
-    ["Utenti AI e assistenti vocali","Scettici dell'AI"],
-    ["Attenti alla privacy digitale","Disattenti alla privacy"],
-    ["Streamer di contenuti","Consumatori lineari (TV, radio)"],
-    ["Abbonati a servizi digitali","Preferiscono acquisti una tantum"],
-    ["Utenti multi-device","Utenti single-device"],
-  ]},
-  { cat: "Social media & contenuti", pairs: [
-    ["Fruitori attivi di social media","In detox dai social"],
-    ["Creatori di contenuti","Solo consumatori"],
-    ["Micro-influencer","Utenti anonimi"],
-    ["Seguaci di trend","Indifferenti ai trend"],
-    ["Fan dei podcast","Preferiscono testo scritto"],
-    ["Lettori di newsletter","Non iscritti a newsletter"],
-    ["Fruitori di video brevi (Reels / TikTok)","Preferiscono video lunghi"],
-    ["Fan degli audiobook","Lettori di libri fisici"],
-    ["Utenti di community online","Preferiscono relazioni offline"],
-    ["Appassionati di meme e cultura internet","Estranei alla cultura internet"],
-  ]},
-  { cat: "Lavoro & carriera", pairs: [
-    ["Lavoratori dipendenti","Freelance / autonomi"],
-    ["Imprenditori","Dipendenti strutturati"],
-    ["Smart worker","In ufficio fisicamente"],
-    ["Multitasker","Monotasker"],
-    ["Annoiati al lavoro","Pienamente impegnati"],
-    ["Creativi professionali","Profili tecnici e scientifici"],
-    ["Manager e team leader","Esecutori"],
-    ["Aspiranti professionisti","Professionisti affermati"],
-    ["Part-time o stagionali","A tempo pieno"],
-    ["Orientati alla carriera","Orientati al work-life balance"],
-    ["Lavoratori digitali (knowledge workers)","Lavoratori manuali"],
-    ["In cerca attiva di lavoro","Occupati stabili"],
-    ["Startupper","Corporate employee"],
-  ]},
-  { cat: "Istruzione & conoscenza", pairs: [
-    ["Istruiti (laurea o più)","Formazione tecnica e professionale"],
-    ["Lettori abituali","Non lettori"],
-    ["Autodidatti","Formazione istituzionale"],
-    ["Studenti","Professionisti già formati"],
-    ["Appassionati di scienza","Umanisti"],
-    ["Poliglotti","Monolingua"],
-    ["Aggiornati sulle news","Disinteressati all'attualità"],
-    ["Appassionati di storia","Orientati al futuro e all'innovazione"],
-    ["Frequentatori di corsi e workshop","Autosufficienti nella formazione"],
-  ]},
-  { cat: "Economia & consumo", pairs: [
-    ["Alto reddito","Basso reddito"],
-    ["Risparmiatori","Spendaccioni"],
-    ["Investitori","Non investitori"],
-    ["Abbonati a servizi premium","Cacciatori di gratuità"],
-    ["Acquirenti d'impulso","Acquirenti pianificati"],
-    ["Amanti del lusso","Orientati al low-cost"],
-    ["Sostenitori dell'economia locale","Acquirenti globali e online"],
-    ["Proprietari di casa","Affittuari"],
-    ["Brand-loyal","Opportunisti (miglior prezzo)"],
-    ["Consumatori consapevoli","Consumatori per abitudine"],
-  ]},
-  { cat: "Geografia & mobilità", pairs: [
-    ["Urbani","Rurali"],
-    ["Amanti della città","Amanti della natura"],
-    ["Pendolari","Lavoratori sotto casa"],
-    ["Viaggiatori frequenti","Stanziali"],
-    ["Expat","Radicati nel territorio d'origine"],
-    ["Auto-dipendenti","Utenti del trasporto pubblico"],
-    ["Ciclisti urbani","Non ciclisti"],
-    ["Residenti in grandi metropoli","Residenti in piccoli centri"],
-    ["Turisti sistematici","Chi raramente viaggia"],
-  ]},
-  { cat: "Relazioni & famiglia", pairs: [
-    ["Single","In coppia o sposati"],
-    ["Genitori","Non genitori"],
-    ["Caregiver di familiari","Non caregiver"],
-    ["Conviventi","Chi vive da solo"],
-    ["Con animali domestici","Senza animali domestici"],
-    ["Famiglie allargate","Famiglie nucleari o individui"],
-    ["Appena separati o divorziati","In relazione stabile da anni"],
-    ["Genitori con figli piccoli","Genitori con figli adulti"],
-  ]},
-  { cat: "Organizzazioni & mercato", pairs: [
-    ["Grandi corporation","PMI e startup"],
-    ["Nonprofit / terzo settore","For profit"],
-    ["B2B","B2C"],
-    ["Settore pubblico","Settore privato"],
-    ["Early stage startup","Aziende mature e consolidate"],
-    ["Agenzie e studi professionali","Liberi professionisti"],
-    ["Mercato globale","Mercato locale o di nicchia"],
-    ["Decisori (C-level, manager)","Utenti finali operativi"],
-  ]},
+window.QDATA = [
+{
+"n": 1,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "E1",
+"construct": "Estroversione · Socievolezza",
+"text": "Mi viene naturale iniziare una conversazione con persone che conosco appena.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 2,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "E2",
+"construct": "Estroversione · Socievolezza",
+"text": "Di solito aspetto che siano gli altri a rivolgermi la parola.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 3,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "E3",
+"construct": "Estroversione · Assertività",
+"text": "Nelle discussioni di gruppo esprimo la mia opinione senza difficoltà.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": "Nuovo in v0.3: la versione precedente si sovrapponeva a IN1."
+},
+{
+"n": 4,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "E4",
+"construct": "Estroversione · Assertività",
+"text": "Quando il gruppo deve decidere, preferisco lasciare la scelta agli altri.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": "Verificare che misuri assertività e non solo preferenza di ruolo; possibile sovrapposizione con IN3."
+},
+{
+"n": 5,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "E5",
+"construct": "Estroversione · Energia",
+"text": "Nel tempo libero ho spesso voglia di fare qualcosa di attivo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 6,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "E6",
+"construct": "Estroversione · Energia",
+"text": "Preferisco giornate tranquille a giornate piene di attività.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 7,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "A1",
+"construct": "Gradevolezza · Compassione",
+"text": "Mi accorgo facilmente quando qualcuno intorno a me è in difficoltà.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 8,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "A2",
+"construct": "Gradevolezza · Compassione",
+"text": "I problemi degli altri mi coinvolgono poco.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 9,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "A3",
+"construct": "Gradevolezza · Rispetto",
+"text": "Anche quando sono in disaccordo, cerco di rispondere con garbo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 10,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "A4",
+"construct": "Gradevolezza · Rispetto",
+"text": "Mi capita di rispondere in modo brusco a chi mi sta intorno.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 11,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "A5",
+"construct": "Gradevolezza · Fiducia",
+"text": "Tendo a pensare che le persone agiscano in buona fede.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 12,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "A6",
+"construct": "Gradevolezza · Fiducia",
+"text": "Con chi conosco da poco preferisco restare sulla difensiva.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 13,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "C1",
+"construct": "Coscienziosità · Organizzazione",
+"text": "Mi organizzo la settimana in anticipo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 14,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "C2",
+"construct": "Coscienziosità · Organizzazione",
+"text": "Mi capita spesso di perdere tempo a cercare le mie cose.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 15,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "C3",
+"construct": "Coscienziosità · Produttività",
+"text": "Quando inizio un compito, lo porto a termine.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 16,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "C4",
+"construct": "Coscienziosità · Produttività",
+"text": "Tendo a rimandare le cose noiose fino all'ultimo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 17,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "C5",
+"construct": "Coscienziosità · Responsabilità",
+"text": "Se prendo un impegno con qualcuno, lo rispetto anche quando mi costa fatica.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 18,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "C6",
+"construct": "Coscienziosità · Responsabilità",
+"text": "Mi capita di arrivare in ritardo agli appuntamenti.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 19,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "N1",
+"construct": "Reattività emotiva · Ansia",
+"text": "Mi preoccupo facilmente per le cose che potrebbero andare storte.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": "Tratto N: nel pool di ricerca; uso in produzione da decidere; mai nel matching."
+},
+{
+"n": 20,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "N2",
+"construct": "Reattività emotiva · Ansia",
+"text": "Affronto le situazioni nuove con serenità.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 21,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "N3",
+"construct": "Reattività emotiva · Volatilità",
+"text": "Il mio umore cambia facilmente da un giorno all'altro.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 22,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "N4",
+"construct": "Reattività emotiva · Volatilità",
+"text": "Quando qualcosa mi irrita, mi passa in fretta.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 23,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "N5",
+"construct": "Reattività emotiva · Umore",
+"text": "Mi scoraggio facilmente quando le cose vanno male.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 24,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "N6",
+"construct": "Reattività emotiva · Umore",
+"text": "Di solito mi riprendo in fretta dopo una delusione.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 25,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "O1",
+"construct": "Apertura mentale · Curiosità intellettuale",
+"text": "Mi piace approfondire argomenti lontani dai miei studi o dal mio lavoro.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 26,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "O2",
+"construct": "Apertura mentale · Curiosità intellettuale",
+"text": "Le discussioni astratte mi annoiano presto.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 27,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "O3",
+"construct": "Apertura mentale · Sensibilità estetica",
+"text": "Mi emoziono davanti a musica, arte o paesaggi.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 28,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "O4",
+"construct": "Apertura mentale · Sensibilità estetica",
+"text": "L'aspetto artistico delle cose mi lascia piuttosto indifferente.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 29,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "O5",
+"construct": "Apertura mentale · Immaginazione creativa",
+"text": "Mi vengono spesso idee originali.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 30,
+"part": "A",
+"block": "A1",
+"blockName": "A1 Personalità (Big Five)",
+"code": "O6",
+"construct": "Apertura mentale · Immaginazione creativa",
+"text": "Preferisco applicare soluzioni già note anziché immaginarne di nuove.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": "Verificare che misuri immaginazione e non solo prudenza."
+},
+{
+"n": 31,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SA1",
+"construct": "Apertura relazionale",
+"text": "Mi piacerebbe allargare la mia cerchia di conoscenze in città.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 32,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SA2",
+"construct": "Apertura relazionale",
+"text": "Partecipare a un'attività con persone mai viste prima mi incuriosisce.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": "Possibile sovrapposizione con E1: verificare nel pilota."
+},
+{
+"n": 33,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SA3",
+"construct": "Apertura relazionale",
+"text": "Per uscire preferisco restare con il mio solito gruppo di amici.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 34,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SA4",
+"construct": "Apertura relazionale",
+"text": "L'idea di incontrare sconosciuti per fare qualcosa insieme mi mette a disagio.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 35,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SP1",
+"construct": "Spontaneità",
+"text": "Se qualcuno mi propone di uscire all'ultimo momento, di solito accetto.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 36,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SP2",
+"construct": "Spontaneità",
+"text": "Mi diverto di più quando i programmi nascono sul momento.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 37,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SP3",
+"construct": "Spontaneità",
+"text": "Per uscire ho bisogno di organizzarmi con qualche giorno di anticipo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 38,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "SP4",
+"construct": "Spontaneità",
+"text": "I cambi di programma improvvisi mi infastidiscono.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": "Verificare la distinzione da AD (adattabilità)."
+},
+{
+"n": 39,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "NE1",
+"construct": "Ricerca di novità",
+"text": "Mi piace provare attività nuove per me.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 40,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "NE2",
+"construct": "Ricerca di novità",
+"text": "Quando scopro un posto nuovo in città, ho voglia di andarci presto.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 41,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "NE3",
+"construct": "Ricerca di novità",
+"text": "Nel tempo libero torno volentieri nei soliti posti.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": "Verificare la distinzione da O (apertura mentale)."
+},
+{
+"n": 42,
+"part": "A",
+"block": "A2",
+"blockName": "A2 Socialità e novità",
+"code": "NE4",
+"construct": "Ricerca di novità",
+"text": "Prima di provare un'esperienza nuova, aspetto che qualcuno me ne parli bene.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 43,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "CF1",
+"construct": "Gestione dei conflitti",
+"text": "Quando nasce un disaccordo, provo a trovare una soluzione accettabile per entrambi.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 44,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "CF2",
+"construct": "Gestione dei conflitti",
+"text": "Dopo una discussione, di solito sono io a fare il primo passo per chiarire.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": "Nuovo in v0.3: la versione precedente era troppo desiderabile e rischiava risposte tutte uguali."
+},
+{
+"n": 45,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "CF3",
+"construct": "Gestione dei conflitti",
+"text": "Nei contrasti tendo a chiudermi finché la tensione passa da sola.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": "Possibile sovrapposizione con AS3: verificare."
+},
+{
+"n": 46,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "AS1",
+"construct": "Comunicazione assertiva",
+"text": "Riesco a chiedere quello di cui ho bisogno.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 47,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "AS2",
+"construct": "Comunicazione assertiva",
+"text": "Se qualcosa mi dà fastidio, lo dico con calma e in modo chiaro.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 48,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "AS3",
+"construct": "Comunicazione assertiva",
+"text": "Preferisco tenermi un fastidio piuttosto che parlarne.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 49,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "AD1",
+"construct": "Adattabilità",
+"text": "Quando cambiano le condizioni di un'attività, riesco ad adattarmi.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 50,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "AD2",
+"construct": "Adattabilità",
+"text": "Se un piano salta, trovo un'alternativa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 51,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "AD3",
+"construct": "Adattabilità",
+"text": "Mi serve molto tempo per abituarmi a un ambiente nuovo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 52,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "IN1",
+"construct": "Iniziativa sociale",
+"text": "Mi capita di proporre uscite o attività agli altri.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 53,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "IN2",
+"construct": "Iniziativa sociale",
+"text": "Riesco a coinvolgere anche le persone più timide in un gruppo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": "Ripristinato dalla v0.1: la versione v0.2 ripeteva IN1."
+},
+{
+"n": 54,
+"part": "A",
+"block": "A3",
+"blockName": "A3 Abilità percepite",
+"code": "IN3",
+"construct": "Iniziativa sociale",
+"text": "Preferisco partecipare a quello che organizzano gli altri piuttosto che proporre io.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 55,
+"part": "A",
+"block": "A4",
+"blockName": "A4 Formato sociale preferito",
+"code": "FG1a",
+"construct": "Dimensione del gruppo",
+"text": "Mi trovo meglio in piccoli gruppi, dove si parla con tutti.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "polo a",
+"cond": "",
+"pilot": false,
+"note": "Non si somma con l'item gemello: si calcola un indice di preferenza relativa (sez. 7.4)."
+},
+{
+"n": 56,
+"part": "A",
+"block": "A4",
+"blockName": "A4 Formato sociale preferito",
+"code": "FG1b",
+"construct": "Dimensione del gruppo",
+"text": "Mi diverto di più in gruppi numerosi, con tanto movimento.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "polo b",
+"cond": "",
+"pilot": false,
+"note": "Non si somma con l'item gemello: si calcola un indice di preferenza relativa (sez. 7.4)."
+},
+{
+"n": 57,
+"part": "A",
+"block": "A4",
+"blockName": "A4 Formato sociale preferito",
+"code": "FG2a",
+"construct": "Tipo di attività",
+"text": "Preferisco attività in cui si fa qualcosa insieme, come sport, giochi o laboratori.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "polo a",
+"cond": "",
+"pilot": false,
+"note": "Non si somma con l'item gemello: si calcola un indice di preferenza relativa (sez. 7.4)."
+},
+{
+"n": 58,
+"part": "A",
+"block": "A4",
+"blockName": "A4 Formato sociale preferito",
+"code": "FG2b",
+"construct": "Tipo di attività",
+"text": "Preferisco occasioni in cui si chiacchiera, come aperitivi, cene o passeggiate.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "polo b",
+"cond": "",
+"pilot": false,
+"note": "Non si somma con l'item gemello: si calcola un indice di preferenza relativa (sez. 7.4)."
+},
+{
+"n": 59,
+"part": "A",
+"block": "A4",
+"blockName": "A4 Formato sociale preferito",
+"code": "FG3a",
+"construct": "Prevedibilità dei partecipanti",
+"text": "Prima di partecipare, mi piace sapere chi ci sarà.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "polo a",
+"cond": "",
+"pilot": false,
+"note": "Non si somma con l'item gemello: si calcola un indice di preferenza relativa (sez. 7.4)."
+},
+{
+"n": 60,
+"part": "A",
+"block": "A4",
+"blockName": "A4 Formato sociale preferito",
+"code": "FG3b",
+"construct": "Prevedibilità dei partecipanti",
+"text": "Mi piace scoprire sul posto chi parteciperà.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "polo b",
+"cond": "",
+"pilot": false,
+"note": "Non si somma con l'item gemello: si calcola un indice di preferenza relativa (sez. 7.4)."
+},
+{
+"n": 61,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT01",
+"construct": "Sport e movimento",
+"text": "Quanto ti interessa: Sport e movimento?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Calcetto; corsa; palestra; pallavolo; arrampicata."
+},
+{
+"n": 62,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT02",
+"construct": "Natura e outdoor",
+"text": "Quanto ti interessa: Natura e outdoor?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Escursioni; canoa; bici; gite in montagna."
+},
+{
+"n": 63,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT03",
+"construct": "Avventura e adrenalina",
+"text": "Quanto ti interessa: Avventura e adrenalina?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Rafting; parapendio; bungee jumping."
+},
+{
+"n": 64,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT04",
+"construct": "Musica dal vivo",
+"text": "Quanto ti interessa: Musica dal vivo?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Concerti; festival; musica nei locali."
+},
+{
+"n": 65,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT05",
+"construct": "Vita notturna",
+"text": "Quanto ti interessa: Vita notturna?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: DJ set; club; locali serali."
+},
+{
+"n": 66,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT06",
+"construct": "Arte, cultura e spettacolo",
+"text": "Quanto ti interessa: Arte, cultura e spettacolo?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Mostre; teatro; cinema; musei; libri."
+},
+{
+"n": 67,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT07",
+"construct": "Cibo e cucina",
+"text": "Quanto ti interessa: Cibo e cucina?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Cene; degustazioni; aperitivi; corsi di cucina."
+},
+{
+"n": 68,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT08",
+"construct": "Giochi e hobby",
+"text": "Quanto ti interessa: Giochi e hobby?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Scacchi; giochi da tavolo; videogiochi; quiz."
+},
+{
+"n": 69,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT09",
+"construct": "Studio e apprendimento",
+"text": "Quanto ti interessa: Studio e apprendimento?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Gruppi di studio; lingue; workshop; conferenze."
+},
+{
+"n": 70,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT10",
+"construct": "Networking e carriera",
+"text": "Quanto ti interessa: Networking e carriera?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Eventi professionali; incontri; bandi."
+},
+{
+"n": 71,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT11",
+"construct": "Tecnologia e innovazione",
+"text": "Quanto ti interessa: Tecnologia e innovazione?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Hackathon; meetup tech; startup."
+},
+{
+"n": 72,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT12",
+"construct": "Volontariato e impegno civico",
+"text": "Quanto ti interessa: Volontariato e impegno civico?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Associazioni; iniziative di quartiere."
+},
+{
+"n": 73,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT13",
+"construct": "Benessere e cura di sé",
+"text": "Quanto ti interessa: Benessere e cura di sé?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Yoga; meditazione; camminate."
+},
+{
+"n": 74,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT14",
+"construct": "Viaggi e territorio",
+"text": "Quanto ti interessa: Viaggi e territorio?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Itinerari; borghi; visite guidate."
+},
+{
+"n": 75,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "INT15",
+"construct": "Creatività e fai da te",
+"text": "Quanto ti interessa: Creatività e fai da te?",
+"fmt": "INT4",
+"opts": [
+"0 Non fa per me",
+"1 Potrei provare",
+"2 Mi piace",
+"3 È una mia passione"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Sotto-categorie mostrate da «Potrei provare» in su: Fotografia; scrittura; laboratori; musica suonata."
+},
+{
+"n": 76,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "MOT1",
+"construct": "Motivazioni",
+"text": "Quando partecipi a un evento o a un'attività, cosa cerchi di più? Scegli al massimo due risposte.",
+"fmt": "SM",
+"opts": [
+"Conoscere persone nuove",
+"Stare con i miei amici",
+"Imparare qualcosa",
+"Muovermi e stare bene",
+"Staccare e divertirmi",
+"Crescere professionalmente",
+"Scoprire il territorio",
+"Rendermi utile agli altri"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 77,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "SRV1",
+"construct": "Disponibilità",
+"text": "In quali momenti sei di solito disponibile per eventi e attività? Puoi scegliere più risposte.",
+"fmt": "SM",
+"opts": [
+"Mattina nei giorni feriali",
+"Pausa pranzo",
+"Pomeriggio",
+"Sera",
+"Weekend"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 78,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "SRV2",
+"construct": "Spesa ideale",
+"text": "Per un'attività o un evento che ti interessa, quanto saresti disposto/a a spendere?",
+"fmt": "SC",
+"opts": [
+"Solo attività gratuite",
+"Fino a 10 €",
+"Da 10 a 25 €",
+"Da 25 a 50 €",
+"Oltre 50 €"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Fasce provvisorie, da verificare nelle interviste cognitive."
+},
+{
+"n": 79,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "SRV3",
+"construct": "Spesa effettiva",
+"text": "Negli ultimi tre mesi, quanto hai speso in media per un'uscita o un'attività?",
+"fmt": "SC",
+"opts": [
+"Niente, solo attività gratuite",
+"Fino a 10 €",
+"Da 10 a 25 €",
+"Da 25 a 50 €",
+"Oltre 50 €",
+"Non ho partecipato ad attività negli ultimi tre mesi"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "L'ultima opzione evita di obbligare a una stima chi non partecipa ad attività."
+},
+{
+"n": 80,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "SRV4",
+"construct": "Distanza",
+"text": "Quanto lontano ti sposti volentieri per un evento o un'attività?",
+"fmt": "SC",
+"opts": [
+"Solo a piedi, entro 15 minuti",
+"In tutta la città",
+"Anche nei comuni vicini",
+"Anche più lontano"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 81,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "OPP1",
+"construct": "Area di studio o lavoro",
+"text": "In quale ambito studi o lavori?",
+"fmt": "SM",
+"opts": [
+"Elenco di ambiti definito dal prodotto"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 82,
+"part": "A",
+"block": "A5",
+"blockName": "A5 Interessi, spesa e disponibilità",
+"code": "OPP2",
+"construct": "Interesse per opportunità",
+"text": "Ti interessano offerte di lavoro, tirocini o bandi?",
+"fmt": "SC",
+"opts": [
+"Sì",
+"No",
+"Più avanti"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 83,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "IM1",
+"construct": "Impression management",
+"text": "Dico sempre la verità, anche quando mi converrebbe tacere.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "1 punto se: Del tutto d'accordo",
+"cond": "",
+"pilot": true,
+"note": "Distribuito tra gli item di A1–A3, mai in blocco."
+},
+{
+"n": 84,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "IM2",
+"construct": "Impression management",
+"text": "Sono sempre gentile con tutti, anche con chi mi sta antipatico.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "1 punto se: Del tutto d'accordo",
+"cond": "",
+"pilot": true,
+"note": "Distribuito tra gli item di A1–A3, mai in blocco."
+},
+{
+"n": 85,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "IM3",
+"construct": "Impression management",
+"text": "Lascio sempre gli spazi comuni più puliti di come li ho trovati.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "1 punto se: Del tutto d'accordo",
+"cond": "",
+"pilot": true,
+"note": "Distribuito tra gli item di A1–A3, mai in blocco."
+},
+{
+"n": 86,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "IM4",
+"construct": "Impression management",
+"text": "Rispetto sempre gli accordi presi, senza eccezioni.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "1 punto se: Del tutto d'accordo",
+"cond": "",
+"pilot": true,
+"note": "Distribuito tra gli item di A1–A3, mai in blocco."
+},
+{
+"n": 87,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "IM5",
+"construct": "Impression management",
+"text": "Mi è capitato di lamentarmi di qualcuno alle sue spalle.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "1 punto se: Per niente d'accordo",
+"cond": "",
+"pilot": true,
+"note": "Distribuito tra gli item di A1–A3, mai in blocco."
+},
+{
+"n": 88,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "IM6",
+"construct": "Impression management",
+"text": "A volte rimando le faccende di casa anche quando tocca a me.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "1 punto se: Per niente d'accordo",
+"cond": "",
+"pilot": true,
+"note": "Distribuito tra gli item di A1–A3, mai in blocco."
+},
+{
+"n": 89,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "AT1",
+"construct": "Attenzione",
+"text": "Per mostrarci che stai leggendo, seleziona «Abbastanza d'accordo».",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "corretta: 4",
+"cond": "",
+"pilot": true,
+"note": "A metà dei blocchi A1–A3."
+},
+{
+"n": 90,
+"part": "A",
+"block": "A6",
+"blockName": "A6 Controlli (solo pilota)",
+"code": "SR1",
+"construct": "Autovalutazione dell'impegno",
+"text": "Hai potuto rispondere con attenzione?",
+"fmt": "SC",
+"opts": [
+"Sì",
+"In parte",
+"No"
+],
+"key": "—",
+"cond": "",
+"pilot": true,
+"note": "Ultima domanda della parte A."
+},
+{
+"n": 91,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "PR1",
+"construct": "D1 Presenza in casa",
+"text": "Passo a casa la maggior parte delle mie serate.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 92,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "PR2",
+"construct": "D1 Presenza in casa",
+"text": "Studio o lavoro spesso da casa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 93,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "PR3",
+"construct": "D1 Presenza in casa",
+"text": "Nei giorni feriali sono fuori casa quasi tutto il giorno.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 94,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "PR4",
+"construct": "D1 Presenza in casa",
+"text": "Nel fine settimana capita spesso che io non sia a casa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 95,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OB1",
+"construct": "D2 Orologio biologico",
+"text": "Nei giorni feriali vado a dormire dopo mezzanotte.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 96,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OB2",
+"construct": "D2 Orologio biologico",
+"text": "Mi capita spesso di usare cucina o bagno dopo le 23.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 97,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OB3",
+"construct": "D2 Orologio biologico",
+"text": "Nei giorni feriali mi sveglio presto, prima delle 8.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 98,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OB4",
+"construct": "D2 Orologio biologico",
+"text": "Durante la settimana i miei orari di sonno sono regolari.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 99,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CS1",
+"construct": "D4 Cura degli spazi",
+"text": "Sistemo la cucina subito dopo averla usata.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 100,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CS2",
+"construct": "D4 Cura degli spazi",
+"text": "Per stare bene in casa ho bisogno che gli spazi comuni siano in ordine.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 101,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CS3",
+"construct": "D4 Cura degli spazi",
+"text": "Faccio le pulizie quando ce n'è bisogno, senza un calendario fisso.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 102,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CS4",
+"construct": "D4 Cura degli spazi",
+"text": "Un po' di disordine negli spazi comuni non mi pesa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 103,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VO1",
+"construct": "D5 Volume della casa",
+"text": "Per studiare o riposare ho bisogno di silenzio in casa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 104,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VO2",
+"construct": "D5 Volume della casa",
+"text": "Negli spazi comuni ascolto musica e video soprattutto in cuffia.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 105,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VO3",
+"construct": "D5 Volume della casa",
+"text": "Mi piace avere musica o TV accese mentre sono in casa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 106,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VO4",
+"construct": "D5 Volume della casa",
+"text": "Un normale rumore di fondo in casa non mi disturba.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 107,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OS1",
+"construct": "D6 Ospiti",
+"text": "Preferisco che la casa sia frequentata soprattutto da chi ci abita.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 108,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OS2",
+"construct": "D6 Ospiti",
+"text": "Preferisco vedere gli amici fuori casa piuttosto che invitarli.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 109,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OS3",
+"construct": "D6 Ospiti",
+"text": "Invito spesso amici a casa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 110,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "OS4",
+"construct": "D6 Ospiti",
+"text": "Per me va bene che un ospite si fermi a dormire anche con poco preavviso.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 111,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VC1",
+"construct": "D7 Vita comune",
+"text": "Preferisco gestire i pasti in autonomia, con i miei orari.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 112,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VC2",
+"construct": "D7 Vita comune",
+"text": "Con i coinquilini preferisco tenere separata la mia vita sociale.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 113,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VC3",
+"construct": "D7 Vita comune",
+"text": "Mi piace cenare insieme ai coinquilini.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 114,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "VC4",
+"construct": "D7 Vita comune",
+"text": "Mi piace condividere la spesa e i prodotti di uso comune.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 115,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CM1",
+"construct": "D8 Comunicazione",
+"text": "Con i coinquilini parlo soprattutto di questioni pratiche.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 116,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CM2",
+"construct": "D8 Comunicazione",
+"text": "Per organizzare la casa preferisco messaggi brevi nella chat di gruppo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 117,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CM3",
+"construct": "D8 Comunicazione",
+"text": "Se qualcosa in casa mi dà fastidio, ne parlo subito.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 118,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "CM4",
+"construct": "D8 Comunicazione",
+"text": "Mi piace raccontare ai coinquilini come sto e cosa mi succede.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 119,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "FR1",
+"construct": "D9 Flessibilità regole",
+"text": "Preferisco regole di casa definite e messe per iscritto.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 120,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "FR2",
+"construct": "D9 Flessibilità regole",
+"text": "Un accordo di casa, una volta preso, va rispettato così com'è.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 121,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "FR3",
+"construct": "D9 Flessibilità regole",
+"text": "Preferisco accordi informali, da aggiustare strada facendo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 122,
+"part": "B",
+"block": "B1",
+"blockName": "B1 Come vivo in casa",
+"code": "FR4",
+"construct": "D9 Flessibilità regole",
+"text": "Preferisco dividere le spese comuni di volta in volta, in base a come va.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 123,
+"part": "B",
+"block": "B2",
+"blockName": "B2 Fumo",
+"code": "FU1",
+"construct": "D3 Fumo in casa",
+"text": "Fumi? (sigarette, tabacco riscaldato o sigaretta elettronica)",
+"fmt": "SC",
+"opts": [
+"0 No",
+"1 Sì, occasionalmente (per esempio solo in compagnia)",
+"2 Sì, abitualmente"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 124,
+"part": "B",
+"block": "B2",
+"blockName": "B2 Fumo",
+"code": "FU2",
+"construct": "D3 Fumo in casa",
+"text": "Quando sei a casa, dove fumi di solito?",
+"fmt": "SC",
+"opts": [
+"0 Solo fuori casa (in strada)",
+"1 Negli spazi esterni della casa (balcone, cortile)",
+"2 Anche nella mia stanza",
+"3 Anche negli spazi comuni"
+],
+"key": "—",
+"cond": "Solo se FU1 = 1 o 2",
+"pilot": false,
+"note": ""
+},
+{
+"n": 125,
+"part": "B",
+"block": "B2",
+"blockName": "B2 Fumo",
+"code": "FU3",
+"construct": "D3 Fumo in casa",
+"text": "Nella casa in cui vivi, per il fumo per te va bene:",
+"fmt": "SC",
+"opts": [
+"0 Divieto totale, anche negli spazi esterni",
+"1 Solo negli spazi esterni (balcone, cortile)",
+"2 Anche nelle stanze private",
+"3 Libero ovunque"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 126,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB11",
+"construct": "D1 Presenza in casa",
+"text": "Nella mia casa ideale c'è quasi sempre qualcuno in casa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 127,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB12",
+"construct": "D1 Presenza in casa",
+"text": "Nella mia casa ideale durante il giorno la casa resta spesso libera, perché ognuno è fuori.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 128,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB21",
+"construct": "D2 Orologio biologico",
+"text": "Nella mia casa ideale va bene che ci sia movimento anche a tarda sera.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 129,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB22",
+"construct": "D2 Orologio biologico",
+"text": "Nella mia casa ideale dopo le 23 c'è silenzio.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 130,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB41",
+"construct": "D4 Cura degli spazi",
+"text": "Nella mia casa ideale gli spazi comuni possono essere un po' vissuti.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 131,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB42",
+"construct": "D4 Cura degli spazi",
+"text": "Nella mia casa ideale gli spazi comuni sono ordinati e puliti ogni giorno.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 132,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB51",
+"construct": "D5 Volume della casa",
+"text": "Nella mia casa ideale c'è un'atmosfera animata, con musica e conversazioni.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 133,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB52",
+"construct": "D5 Volume della casa",
+"text": "Nella mia casa ideale l'atmosfera è tranquilla e silenziosa.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 134,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB61",
+"construct": "D6 Ospiti",
+"text": "Nella mia casa ideale amici e ospiti sono benvenuti anche spesso.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 135,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB62",
+"construct": "D6 Ospiti",
+"text": "Nella mia casa ideale gli ospiti sono occasionali e concordati.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 136,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB71",
+"construct": "D7 Vita comune",
+"text": "Nella mia casa ideale si passa del tempo insieme, come in una piccola famiglia.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 137,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB72",
+"construct": "D7 Vita comune",
+"text": "Nella mia casa ideale ognuno ha i propri spazi e i propri tempi.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 138,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB81",
+"construct": "D8 Comunicazione",
+"text": "Nella mia casa ideale si parla apertamente di tutto.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 139,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB82",
+"construct": "D8 Comunicazione",
+"text": "Nella mia casa ideale si comunica il necessario, in modo semplice.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 140,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB91",
+"construct": "D9 Flessibilità regole",
+"text": "Nella mia casa ideale le regole si decidono insieme, strada facendo.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "+",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 141,
+"part": "B",
+"block": "B3",
+"blockName": "B3 La mia casa ideale",
+"code": "AMB92",
+"construct": "D9 Flessibilità regole",
+"text": "Nella mia casa ideale le regole sono chiare e stabilite fin dall'inizio.",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "R",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 142,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP1",
+"construct": "D1 Presenza in casa",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: presenza in casa?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 143,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP2",
+"construct": "D2 Orologio biologico",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: orologio biologico?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 144,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP3",
+"construct": "D3 Fumo in casa",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: fumo in casa?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 145,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP4",
+"construct": "D4 Cura degli spazi",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: cura degli spazi?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 146,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP5",
+"construct": "D5 Volume della casa",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: volume della casa?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 147,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP6",
+"construct": "D6 Ospiti",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: ospiti?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 148,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP7",
+"construct": "D7 Vita comune",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: vita comune?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 149,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP8",
+"construct": "D8 Comunicazione",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: comunicazione?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 150,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "IMP9",
+"construct": "D9 Flessibilità regole",
+"text": "Quanto è importante per te che la casa corrisponda alle tue preferenze su questo aspetto: flessibilità regole?",
+"fmt": "IMP5",
+"opts": [
+"1 Per niente importante",
+"2 Poco importante",
+"3 Moderatamente importante",
+"4 Molto importante",
+"5 Estremamente importante"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 151,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "LIM1",
+"construct": "Limiti di adattamento",
+"text": "Su quali aspetti ti sarebbe difficile adattarti, se la casa fosse diversa da come la vorresti? Scegline al massimo tre.",
+"fmt": "SM",
+"opts": [
+"Presenza in casa",
+"Orologio biologico",
+"Fumo in casa",
+"Cura degli spazi",
+"Volume della casa",
+"Ospiti",
+"Vita comune",
+"Comunicazione",
+"Flessibilità regole",
+"Nessuno"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": ""
+},
+{
+"n": 152,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "AT2",
+"construct": "Attenzione",
+"text": "Per questa domanda seleziona «Poco d'accordo».",
+"fmt": "L5",
+"opts": [
+"1 Per niente d'accordo",
+"2 Poco d'accordo",
+"3 Né d'accordo né in disaccordo",
+"4 Abbastanza d'accordo",
+"5 Del tutto d'accordo"
+],
+"key": "corretta: 2",
+"cond": "",
+"pilot": true,
+"note": "Inserita a metà del blocco B1. Non conteggiata in nessuna area."
+},
+{
+"n": 153,
+"part": "B",
+"block": "B4",
+"blockName": "B4 Importanza",
+"code": "SR2",
+"construct": "Autovalutazione dell'impegno",
+"text": "Hai potuto rispondere con attenzione?",
+"fmt": "SC",
+"opts": [
+"Sì",
+"In parte",
+"No"
+],
+"key": "—",
+"cond": "",
+"pilot": true,
+"note": "Ultima domanda della parte B."
+},
+{
+"n": 154,
+"part": "C",
+"block": "C1",
+"blockName": "C1 Chiusura",
+"code": "TXT1",
+"construct": "Testo libero",
+"text": "C'è qualcos'altro che ti piace, che vorresti provare o che vorresti farci sapere? Scrivilo qui. In qualsiasi momento potrai aggiungere cose nuove anche scrivendole a Nia: le salverà automaticamente nella tua memoria.",
+"fmt": "TXT",
+"opts": [
+"Campo di testo libero, facoltativo"
+],
+"key": "—",
+"cond": "",
+"pilot": false,
+"note": "Ultima schermata, dopo l'ultima parte compilata. L'utente deve poter vedere, modificare e cancellare ciò che Nia ha salvato."
+}
 ];
 
-let activeCategory = "__all__";
+</script>
+<script>
+/* Configurazione: blocchi, scale, poli e descrizioni. Le domande vengono da data.js (generato dal file xlsx v0.4). */
+window.CFG = {
+  blocks: [
+    { id:'A1', part:'A', title:'Personalità', sub:'Big Five', district:'Quartiere Carattere', shape:'tower', nb:6,
+      intro:'Quanto ti riconosci in ciascuna frase? Pensa a come sei di solito, non a come vorresti essere.',
+      done:'Le fondamenta della città sono gettate: qui si vede come sei fatto/a.' },
+    { id:'A2', part:'A', title:'Socialità e novità', sub:'Come ti muovi tra le persone', district:'Piazza Nuova', shape:'low', nb:3,
+      intro:'Come per il blocco precedente: quanto ti riconosci in ciascuna frase? Pensa a come sei di solito.',
+      done:'La piazza è aperta: ora l\'app sa come ti muovi tra persone e novità.' },
+    { id:'A3', part:'A', title:'Abilità percepite', sub:'Come pensi di cavartela', district:'Officina', shape:'saw', nb:3,
+      intro:'Come per il blocco precedente. Sono autodescrizioni: racconta come ti vedi, non come dovresti essere.',
+      done:'L\'officina è pronta: conflitti, assertività, adattabilità e iniziativa.' },
+    { id:'A4', part:'A', title:'Formato sociale preferito', sub:'Gruppi, attività, sorprese', district:'Teatro', shape:'dome', nb:2,
+      intro:'Come per il blocco precedente. Ogni preferenza è misurata da due frasi opposte: entrambe possono essere vere, rispondi a ciascuna per conto suo.',
+      done:'Il teatro è illuminato: sappiamo che tipo di occasioni ti si addicono.' },
+    { id:'A5', part:'A', title:'Interessi e disponibilità', sub:'Cosa ti piace, quando, quanto', district:'Parco degli Interessi', shape:'arch', nb:5,
+      intro:'Per ogni area scegli quanto ti interessa. Dove rispondi «Potrei provare» o più, potrai indicare anche cosa in particolare.',
+      done:'Il parco è fiorito: da qui l\'app può proporti eventi e attività adatti a te.' },
+    { id:'B1', part:'B', title:'Come vivo in casa', sub:'Le tue abitudini di convivenza', district:'Via delle Abitudini', shape:'gable', nb:6,
+      intro:'Pensa a come vivi di solito in casa, o a come vivresti in una casa condivisa. Quanto sei d\'accordo?',
+      done:'La via è costruita: ecco le tue abitudini di convivenza.' },
+    { id:'B2', part:'B', title:'Fumo', sub:'Tre domande', district:'Chiosco', shape:'kiosk', nb:1,
+      intro:'Tre domande sul fumo in casa, per capire abitudini e regole che accetti.',
+      done:'Il chiosco è aperto.' },
+    { id:'B3', part:'B', title:'La mia casa ideale', sub:'L\'ambiente in cui stai meglio', district:'Villaggio Ideale', shape:'house', nb:4,
+      intro:'Pensa alla casa in cui ti troveresti meglio: come si vive, che atmosfera c\'è, come si organizza. Quanto sei d\'accordo?',
+      done:'Il villaggio ideale è fatto: ora abbiamo anche la casa che desideri.' },
+    { id:'B4', part:'B', title:'Importanza e limiti', sub:'Cosa conta di più per te', district:'Isolato Priorità', shape:'block', nb:3,
+      intro:'Per ognuno dei nove aspetti della convivenza, dicci quanto è importante che la casa corrisponda alle tue preferenze.',
+      done:'L\'isolato è completo: sappiamo su cosa non transigi.' },
+    { id:'C1', part:'C', title:'Chiusura', sub:'Una parola in più', district:'Faro', shape:'light', nb:1,
+      intro:'Ultima schermata: aggiungi liberamente quello che vuoi.',
+      done:'Il faro è acceso: la città è completa.' }
+  ],
 
-function buildTabs() {
-  const el = document.getElementById('cat-tabs');
-  const cats = [{ id: "__all__", label: "Tutte" }, ...DATA.map(d => ({ id: d.cat, label: d.cat }))];
-  el.innerHTML = cats.map(c =>
-    `<button class="cat-tab ${c.id === activeCategory ? 'active' : ''}" onclick="setCategory('${c.id}')">${c.label}</button>`
-  ).join('');
-}
+  /* Aree di convivenza D1..D9 (D3 Fumo è categorico e non ha scala) */
+  areas: [
+    { d:'D1', name:'Presenza in casa', pre:'PR', amb:'AMB1', A:'Spesso fuori', B:'Quasi sempre a casa', desc:'Quanto tempo trascorri in casa, di giorno e di sera.' },
+    { d:'D2', name:'Orologio biologico', pre:'OB', amb:'AMB2', A:'Metodico / diurno', B:'Flessibile / notturno', desc:'Orari di sonno e di uso di cucina e bagno.' },
+    { d:'D4', name:'Cura degli spazi', pre:'CS', amb:'AMB4', A:'Sempre in ordine', B:'Quando serve', desc:'Ordine e pulizia degli spazi comuni.' },
+    { d:'D5', name:'Volume della casa', pre:'VO', amb:'AMB5', A:'Tranquilla', B:'Animata', desc:'Rumore, musica e atmosfera in casa.' },
+    { d:'D6', name:'Ospiti', pre:'OS', amb:'AMB6', A:'Spazio privato', B:'Libertà totale', desc:'Quanto e con che preavviso si accolgono ospiti.' },
+    { d:'D7', name:'Vita comune', pre:'VC', amb:'AMB7', A:'Autonomia', B:'Vita condivisa', desc:'Pasti, spesa e tempo passato con i coinquilini.' },
+    { d:'D8', name:'Comunicazione', pre:'CM', amb:'AMB8', A:'Essenziale', B:'Dialogante', desc:'Come e quanto si parla tra coinquilini.' },
+    { d:'D9', name:'Flessibilità regole', pre:'FR', amb:'AMB9', A:'Regole definite', B:'Accordi informali', desc:'Quanto le regole sono fisse o negoziabili.' }
+  ],
+  areaOrderNote: 'D3 Fumo in casa è trattato a parte (regola categoriale, sez. 8.3).',
 
-function setCategory(id) {
-  activeCategory = id;
-  buildTabs();
-  render();
-}
+  /* Scale di personalità e socialità (punteggio 0–100, sez. 7.2) */
+  scales: [
+    { id:'E', block:'A1', re:/^E\d$/, label:'Estroversione', A:'Riservato/a', B:'Socievole ed energico/a',
+      desc:'Quanto ti viene naturale cercare contatto, farti sentire e stare in attività.' },
+    { id:'AG', block:'A1', re:/^A\d$/, label:'Gradevolezza', A:'Schietto/a e scettico/a', B:'Cordiale e fiducioso/a',
+      desc:'Attenzione agli altri, garbo nel disaccordo, fiducia di base.' },
+    { id:'C', block:'A1', re:/^C\d$/, label:'Coscienziosità', A:'Flessibile e informale', B:'Organizzato/a e affidabile',
+      desc:'Organizzazione, portare a termine, rispettare gli impegni.' },
+    { id:'N', block:'A1', re:/^N\d$/, label:'Reattività emotiva', A:'Emotivamente stabile', B:'Emotivamente reattivo/a', research:true,
+      desc:'Ansia, sbalzi d\'umore, scoraggiamento. Solo ricerca: mai usata per il matching.' },
+    { id:'O', block:'A1', re:/^O\d$/, label:'Apertura mentale', A:'Concreto/a e pratico/a', B:'Curioso/a e creativo/a',
+      desc:'Curiosità intellettuale, sensibilità estetica, immaginazione.' },
+    { id:'SA', block:'A2', re:/^SA\d$/, label:'Apertura relazionale', A:'Cerchia consolidata', B:'Aperto/a a nuove conoscenze',
+      desc:'Desiderio di allargare la cerchia e incontrare persone nuove.' },
+    { id:'SP', block:'A2', re:/^SP\d$/, label:'Spontaneità', A:'Preferisce pianificare', B:'Preferisce improvvisare',
+      desc:'Come ti trovi con programmi last minute e cambi di piano.' },
+    { id:'NE', block:'A2', re:/^NE\d$/, label:'Ricerca di novità', A:'Preferisce il familiare', B:'Cerca cose nuove',
+      desc:'Attrazione per attività e luoghi nuovi.' },
+    { id:'CF', block:'A3', re:/^CF\d$/, label:'Gestione dei conflitti', A:'Tende a ritirarsi', B:'Cerca soluzioni e ricucire',
+      desc:'Cosa fai quando nasce un disaccordo (autodescrizione).' },
+    { id:'AS', block:'A3', re:/^AS\d$/, label:'Comunicazione assertiva', A:'Tende a trattenersi', B:'Si esprime con chiarezza',
+      desc:'Chiedere ciò che serve e dire ciò che dà fastidio (autodescrizione).' },
+    { id:'AD', block:'A3', re:/^AD\d$/, label:'Adattabilità', A:'Ha bisogno di tempo', B:'Si adatta in fretta',
+      desc:'Reagire a cambi di condizioni e ambienti nuovi (autodescrizione).' },
+    { id:'IN', block:'A3', re:/^IN\d$/, label:'Iniziativa sociale', A:'Segue le proposte altrui', B:'Propone e coinvolge',
+      desc:'Proporre attività e coinvolgere gli altri (autodescrizione).' }
+  ],
 
-function render() {
-  const q = document.getElementById('search').value.toLowerCase().trim();
-  const main = document.getElementById('main');
-  const empty = document.getElementById('empty');
-  main.innerHTML = '';
-  let total = 0;
+  /* Indici del formato sociale (sez. 7.4): coppie a/b */
+  prefs: [
+    { id:'FG1', label:'Dimensione del gruppo', A:'Piccoli gruppi', B:'Gruppi numerosi' },
+    { id:'FG2', label:'Tipo di attività', A:'Fare qualcosa insieme', B:'Chiacchierare' },
+    { id:'FG3', label:'Prevedibilità dei partecipanti', A:'Sapere chi ci sarà', B:'Scoprirlo sul posto' }
+  ],
 
-  const filtered = activeCategory === "__all__" ? DATA : DATA.filter(d => d.cat === activeCategory);
+  interestSubs: {}, // riempito da app.js dalle note delle domande INT
 
-  filtered.forEach(section => {
-    const matching = section.pairs.filter(([a, b]) =>
-      !q || a.toLowerCase().includes(q) || b.toLowerCase().includes(q) || section.cat.toLowerCase().includes(q)
-    );
-    if (!matching.length) return;
+  /* Elenco provvisorio per OPP1 (il foglio dice: «Elenco di ambiti definito dal prodotto») */
+  oppOptions: ['Scienze e tecnologie','Ingegneria e informatica','Economia e management','Giurisprudenza e scienze politiche',
+    'Scienze umane e sociali','Salute e medicina','Arte, design e comunicazione','Formazione e educazione','Artigianato, commercio e servizi','Altro'],
 
-    const sec = document.createElement('div');
-    sec.className = 'section';
-    sec.innerHTML = `
-      <div class="section-header">
-        <span class="section-label">${section.cat}</span>
-        <span class="section-line"></span>
-        <span class="section-num">${matching.length}</span>
-      </div>
-      <div class="pairs-grid">
-        ${matching.map(([a, b]) => `
-          <div class="pair ${q && (a.toLowerCase().includes(q) || b.toLowerCase().includes(q)) ? 'highlight' : ''}">
-            <span class="pole left">${highlight(a, q)}</span>
-            <span class="separator"><span class="sep-dot"></span><span class="sep-line"></span><span class="sep-dot"></span></span>
-            <span class="pole right">${highlight(b, q)}</span>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    main.appendChild(sec);
-    total += matching.length;
+  /* Aree del profilo per etichette: nomi brevi dei livelli */
+  intLabels: ['Non fa per me','Potrei provare','Mi piace','Passione']
+};
+
+</script>
+<script>
+/* La città che cresce: ogni blocco è un quartiere, ogni risposta fa salire un edificio. */
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const H = 170, G = 148;             // altezza vista e linea del suolo
+  const STOPS = ['#F06139', '#D43998', '#BB2DCE', '#8B1EBA', '#471EBA', '#1E42BA'];
+  const hex2 = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const toHex = a => '#' + a.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+  const mix = (a, b, t) => { const x = hex2(a), y = hex2(b); return toHex(x.map((v, i) => v + (y[i] - v) * t)); };
+  const shade = (h, t) => t < 0 ? mix(h, '#000000', -t) : mix(h, '#ffffff', t);
+  const gradColor = t => { const p = t * (STOPS.length - 1), i = Math.min(STOPS.length - 2, Math.floor(p)); return mix(STOPS[i], STOPS[i + 1], p - i); };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+
+  const HEIGHT = { tower: [78, 100], low: [34, 46], saw: [40, 52], dome: [52, 64], arch: [56, 74], gable: [42, 58], kiosk: [24, 30], house: [46, 62], block: [66, 88], light: [96, 96] };
+
+  /* ogni forma disegna con il suolo a y=0 e sale verso valori negativi */
+  function shapeSVG(kind, w, h, c) {
+    const dk = shade(c, -.22), lt = shade(c, .28), wins = [];
+    let s = '';
+    const body = (x = 0, ww = w, hh = h, fill = c) => `<rect x="${x}" y="${-hh}" width="${ww}" height="${hh}" fill="${fill}"/>`;
+    const grid = (top, bottom, pad = 5) => {
+      const cols = Math.max(1, Math.floor((w - pad * 2 + 3) / 9)), rows = Math.max(1, Math.floor((bottom - top) / 13));
+      const gx = (w - (cols * 9 - 3)) / 2;
+      for (let r = 0; r < rows; r++) for (let q = 0; q < cols; q++) wins.push([gx + q * 9, -bottom + 4 + r * 13, 6, 8]);
+    };
+    switch (kind) {
+      case 'tower':
+        s = body() + `<rect x="${w * .3}" y="${-h - 8}" width="${w * .4}" height="8" fill="${dk}"/><path d="M${w / 2} ${-h - 8}V${-h - 20}" stroke="${dk}" stroke-width="1.6"/><circle cx="${w / 2}" cy="${-h - 21}" r="1.8" fill="${lt}"/>`;
+        grid(4, h - 4); break;
+      case 'low':
+        s = body() + `<rect x="-3" y="${-h - 4}" width="${w + 6}" height="5" fill="${dk}"/>` +
+          [0, 1, 2, 3].map(i => `<rect x="${i * (w / 4)}" y="${-h + 4}" width="${w / 8}" height="8" fill="${lt}"/>`).join('') +
+          `<rect x="${w / 2 - 4}" y="-13" width="8" height="13" rx="1.5" fill="${dk}"/>`;
+        grid(18, h - 8); break;
+      case 'saw': {
+        const n = 3, t = w / n; let d = `M0 ${-h}`;
+        for (let i = 0; i < n; i++) d += `L${i * t} ${-h - 12}L${(i + 1) * t} ${-h}`;
+        s = body() + `<path d="${d}Z" fill="${dk}"/><rect x="${w * .12}" y="-15" width="${w * .3}" height="15" fill="${lt}"/>`;
+        grid(6, h - 6); break; }
+      case 'dome':
+        s = body(0, w, h) + `<path d="M${-2} ${-h}A${w / 2 + 2} ${w * .62} 0 0 1 ${w + 2} ${-h}Z" fill="${dk}"/><path d="M${w / 2} ${-h - w * .62}v-7" stroke="${dk}" stroke-width="1.6"/>` +
+          [1, 2, 3].map(i => `<rect x="${i * w / 4 - 1.5}" y="${-h + 6}" width="3" height="${h - 6}" fill="${lt}"/>`).join(''); break;
+      case 'arch':
+        s = body() + `<path d="M-3 ${-h}L${w / 2} ${-h - 15}L${w + 3} ${-h}Z" fill="${dk}"/>` +
+          [0, 1, 2].map(i => `<rect x="${5 + i * ((w - 14) / 2)}" y="${-h + 8}" width="4" height="${h - 8}" fill="${lt}"/>`).join('') +
+          `<path d="M${w / 2 - 5} 0V-9A5 5 0 0 1 ${w / 2 + 5} -9V0Z" fill="${dk}"/>`; break;
+      case 'gable':
+        s = body() + `<path d="M-4 ${-h}L${w / 2} ${-h - 16}L${w + 4} ${-h}Z" fill="${dk}"/><rect x="${w * .7}" y="${-h - 16}" width="4" height="10" fill="${dk}"/><rect x="${w / 2 - 3.5}" y="-12" width="7" height="12" rx="1.5" fill="${lt}"/>`;
+        grid(6, h - 6); break;
+      case 'kiosk':
+        s = body() + `<path d="M-4 ${-h}L${w * .2} ${-h - 9}H${w * .8}L${w + 4} ${-h}Z" fill="${dk}"/><rect x="4" y="${-h + 5}" width="${w - 8}" height="9" fill="${lt}"/><rect x="${w - 8}" y="${-h - 16}" width="4" height="8" fill="${dk}"/>`; break;
+      case 'house':
+        s = body() + `<path d="M-5 ${-h}L${w / 2} ${-h - 18}L${w + 5} ${-h}Z" fill="${dk}"/><rect x="${w * .16}" y="${-h - 14}" width="4" height="10" fill="${dk}"/><rect x="${w / 2 - 4}" y="-14" width="8" height="14" rx="2" fill="${lt}"/><circle cx="${w / 2}" cy="${-h + 6}" r="2.6" fill="${lt}"/>`;
+        grid(12, h - 8); break;
+      case 'block':
+        s = body() + `<rect x="-2" y="${-h - 4}" width="${w + 4}" height="5" fill="${dk}"/>` +
+          Array.from({ length: Math.floor(h / 13) }, (_, i) => `<rect x="-2" y="${-13 * (i + 1) + 1}" width="${w + 4}" height="1.6" fill="${dk}"/>`).join('');
+        grid(4, h - 4); break;
+      case 'light':
+        s = `<path d="M${w * .18} 0L${w * .32} ${-h}H${w * .68}L${w * .82} 0Z" fill="${c}"/><path d="M${w * .245} ${-h * .32}L${w * .275} ${-h * .5}H${w * .725}L${w * .755} ${-h * .32}Z" fill="#fff" opacity=".85"/>` +
+          `<rect x="${w * .28}" y="${-h - 9}" width="${w * .44}" height="9" fill="${dk}"/><path d="M${w * .22} ${-h - 9}L${w / 2} ${-h - 19}L${w * .78} ${-h - 9}Z" fill="${dk}"/>` +
+          `<circle class="win lamp-l" cx="${w / 2}" cy="${-h - 4.5}" r="3" />`; break;
+    }
+    return { svg: s, wins };
+  }
+
+  const City = {
+    init(svg, blocks) {
+      this.svg = svg; this.blocks = blocks; this.cx = 0; this.scale = 1; this.g = 0;
+      svg.innerHTML = '';
+      const defs = el('defs', {}, svg);
+      const sky = el('linearGradient', { id: 'sky', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+      this.s1 = el('stop', { offset: 0, 'stop-color': '#c9c6ec' }, sky);
+      this.s2 = el('stop', { offset: 1, 'stop-color': '#f3d9e6' }, sky);
+      const glow = el('radialGradient', { id: 'glow' }, defs);
+      el('stop', { offset: 0, 'stop-color': '#FFE9B0', 'stop-opacity': .95 }, glow);
+      el('stop', { offset: 1, 'stop-color': '#FFE9B0', 'stop-opacity': 0 }, glow);
+      this.skyR = el('rect', { x: 0, y: 0, width: 400, height: H, fill: 'url(#sky)' }, svg);
+      this.sunG = el('g', {}, svg);
+      el('circle', { r: 26, fill: 'url(#glow)' }, this.sunG);
+      el('circle', { r: 10, fill: '#FFE29A' }, this.sunG);
+      this.clouds = el('g', { opacity: .75 }, svg);
+      [[30, 34, 1], [150, 52, .8], [250, 26, 1.1]].forEach(([x, y, k], i) => {
+        const g = el('g', { class: 'cloud', style: `animation-delay:${-i * 18}s;animation-duration:${55 + i * 17}s` }, this.clouds);
+        g.setAttribute('transform', `translate(${x} ${y}) scale(${k})`);
+        el('ellipse', { cx: 0, cy: 0, rx: 16, ry: 5, fill: '#fff' }, g); el('ellipse', { cx: 9, cy: -4, rx: 9, ry: 5, fill: '#fff' }, g); el('ellipse', { cx: -8, cy: -3, rx: 7, ry: 4, fill: '#fff' }, g);
+      });
+      this.far = el('g', {}, svg); this.mid = el('g', {}, svg);
+      this.world = el('g', {}, svg);
+      this.layout();
+      this.resize();
+    },
+
+    layout() {
+      const r = rng(11), w0 = this.world; w0.innerHTML = '';
+      this.ground = el('rect', { x: -400, y: G, width: 4000, height: 80, fill: '#4b4768' }, w0);
+      el('rect', { x: -400, y: G, width: 4000, height: 4, fill: '#68638a' }, w0);
+      let x = 40; this.districts = {}; this.blds = [];
+      this.blocks.forEach((b, bi) => {
+        const col = gradColor(bi / (this.blocks.length - 1)), d = { id: b.id, x0: x - 12, blds: [], color: col, maxH: 0 };
+        const dg = el('g', {}, w0); d.g = dg;
+        for (let i = 0; i < b.nb; i++) {
+          const kind = b.shape, hr = HEIGHT[kind];
+          const w = kind === 'light' ? 26 : kind === 'kiosk' ? 24 : Math.round(22 + r() * 10);
+          const h = Math.round(hr[0] + r() * (hr[1] - hr[0]));
+          const c = shade(col, (r() - .5) * .3);
+          const og = el('g', { transform: `translate(${x} ${G})` }, dg);
+          el('rect', { x: -2, y: -h, width: w + 4, height: h, rx: 3, fill: 'none', stroke: '#fff', 'stroke-opacity': .45, 'stroke-dasharray': '3 3', class: 'lot' }, og);
+          const gg = el('g', { class: 'grow', style: 'transform:scaleY(0.0001);opacity:0' }, og);
+          const sh = shapeSVG(kind, w, h, c);
+          gg.innerHTML = sh.svg;
+          const lightWin = gg.querySelector('.lamp-l');
+          const winEls = sh.wins.map(([wx, wy, ww, wh]) => { const e = el('rect', { x: wx, y: wy, width: ww, height: wh, rx: 1.2, class: 'win' }, gg); e.__lit = r() < .78; return e; });
+          const crane = el('g', { class: 'crane', style: 'opacity:0' }, og);
+          // gru: traliccio giallo, braccio con contrappeso e gancio con carico (non deve sembrare un lampione)
+          el('path', { d: 'M-2.5 0V-32M2.5 0V-32M-2.5 -4L2.5 -9M2.5 -9L-2.5 -14M-2.5 -14L2.5 -19M2.5 -19L-2.5 -24M-2.5 -24L2.5 -29', stroke: '#F2B233', 'stroke-width': 1.1, fill: 'none', 'stroke-linecap': 'round' }, crane);
+          el('path', { d: 'M-10 -33H22M-2.5 -32L-10 -33M2.5 -32L19 -33', stroke: '#F2B233', 'stroke-width': 1.6, fill: 'none', 'stroke-linecap': 'round' }, crane);
+          el('rect', { x: -13, y: -37, width: 6, height: 5, fill: '#5a5470' }, crane);
+          el('path', { d: 'M17 -33V-22', stroke: '#2b2740', 'stroke-width': .8 }, crane);
+          el('rect', { x: 14.5, y: -22, width: 5, height: 4, fill: '#e2553a' }, crane);
+          const bo = { g: og, grow: gg, crane, winEls, lightWin, lot: og.firstChild, x, w, h, blk: b.id, i };
+          d.blds.push(bo); this.blds.push(bo); d.maxH = Math.max(d.maxH, h + (kind === 'light' ? 20 : kind === 'tower' ? 22 : 18));
+          x += w + 5 + Math.round(r() * 5);
+        }
+        d.x1 = x + 8;
+        // lampione + albero + insegna
+        const lampX = x + 2, tr = el('g', { transform: `translate(${lampX + 12} ${G})` }, dg);
+        d.tree = el('g', { class: 'grow', style: 'transform:scaleY(0.0001)' }, tr);
+        el('rect', { x: -1.2, y: -12, width: 2.4, height: 12, fill: '#5c4a3a' }, d.tree);
+        el('circle', { cx: 0, cy: -18, r: 9, fill: '#5bb37f' }, d.tree); el('circle', { cx: -5, cy: -14, r: 6, fill: '#4aa06d' }, d.tree); el('circle', { cx: 5, cy: -15, r: 6, fill: '#6fc48f' }, d.tree);
+        const lp = el('g', { transform: `translate(${lampX} ${G})` }, dg);
+        el('path', { d: 'M0 0V-26H6', stroke: '#2b2740', 'stroke-width': 1.6, fill: 'none' }, lp);
+        d.lamp = el('circle', { cx: 6, cy: -24, r: 3.2, class: 'lamp' }, lp);
+        d.label = el('text', { x: (d.x0 + x) / 2, y: G + 13, 'text-anchor': 'middle', 'font-size': 7.4, 'font-weight': 800, fill: '#fff', 'fill-opacity': 0, style: 'transition:fill-opacity .6s;font-family:Manrope,system-ui,sans-serif;letter-spacing:.04em' }, dg);
+        d.label.textContent = b.district.toUpperCase();
+        d.x1 = lampX + 26; x = d.x1 + 6;
+        this.districts[b.id] = d;
+      });
+      this.totalW = x + 30;
+      // colline in parallasse
+      const hill = (f, base, amp, fill, op) => {
+        const g = f === .15 ? this.far : this.mid; g.innerHTML = '';
+        const w = this.totalW * f + 1200; let d = `M-400 ${G}`;
+        for (let px = -400; px <= w; px += 20) d += `L${px} ${G - base - amp * (Math.sin(px / 70 * (f < .2 ? .7 : 1)) * .6 + Math.sin(px / 33 + f * 9) * .4)}`;
+        el('path', { d: d + `L${w} ${G}Z`, fill, 'fill-opacity': op }, g);
+      };
+      hill(.15, 34, 16, '#9c98c8', .55); hill(.35, 18, 12, '#7d79a8', .7);
+    },
+
+    resize() {
+      const r = this.svg.getBoundingClientRect(); if (!r.width) return;
+      this.vbW = H * r.width / r.height;
+      this.svg.setAttribute('viewBox', `0 0 ${this.vbW} ${H}`);
+      this.skyR.setAttribute('width', this.vbW);
+      this.setSun(this.g);
+      this.camera(this.cx, this.scale, 0);
+    },
+
+    setSun(g) {
+      const w = this.vbW || 300;
+      this.sunG.style.transition = 'transform 1.2s ease';
+      this.sunG.style.transform = `translate(${w * (.18 + .64 * g)}px, ${112 - 68 * Math.sin(g * Math.PI / 2)}px)`;
+    },
+
+    camera(cx, scale, dur = 1000, ease = 'cubic-bezier(.3,.8,.2,1)') {
+      this.cx = cx; this.scale = scale;
+      const t = `transform ${dur}ms ${ease}`;
+      [this.world, this.far, this.mid].forEach(g => g.style.transition = t);
+      this.world.style.transformOrigin = '0 0';
+      this.world.style.transform = `translate(${this.vbW / 2}px, ${G}px) scale(${scale}) translate(${-cx}px, ${-G}px)`;
+      this.far.style.transform = `translate(${-cx * .15 * scale}px,0)`;
+      this.mid.style.transform = `translate(${-cx * .35 * scale}px,0)`;
+    },
+
+    focus(id, dur) {
+      const d = this.districts[id]; if (!d) return;
+      const wd = d.x1 - d.x0, s = clamp(Math.min(this.vbW * .94 / wd, 112 / d.maxH), .8, 1.55);
+      this.camera((d.x0 + d.x1) / 2, s, dur);
+    },
+
+    /* prog: {id: 0..1}; g: avanzamento complessivo 0..1 */
+    render(prog, g) {
+      this.g = g;
+      this.s1.setAttribute('stop-color', mix('#c9c6ec', '#9cc6f4', g));
+      this.s2.setAttribute('stop-color', mix('#f0d6e8', '#ffe2b4', g));
+      this.setSun(g);
+      this.blocks.forEach(b => {
+        const d = this.districts[b.id], pr = clamp(prog[b.id] || 0, 0, 1), n = d.blds.length;
+        d.blds.forEach((bo, i) => {
+          const p = clamp(pr * n - i, 0, 1);
+          const prev = bo.p; bo.p = p;
+          bo.grow.style.transform = `scaleY(${Math.max(p, .0001)})`;
+          bo.grow.style.opacity = p > 0 ? 1 : 0;
+          bo.lot.style.opacity = p >= 1 ? 0 : 1;
+          const building = p > 0 && p < 1;
+          bo.crane.style.opacity = building ? 1 : 0;
+          bo.crane.style.transform = `translate(${bo.w * .72}px, ${-bo.h * p}px)`;
+          bo.winEls.forEach(w => w.classList.toggle('lit', p >= 1 && w.__lit));
+          if (bo.lightWin) bo.lightWin.classList.toggle('lit', p >= 1);
+          if (prev !== undefined && p > prev) { bo.grow.classList.remove('pop'); void bo.grow.getBoundingClientRect(); bo.grow.classList.add('pop'); }
+        });
+        d.tree.style.transform = `scaleY(${Math.max(clamp(pr * 1.4, 0, 1), .0001)})`;
+        d.lamp.classList.toggle('lit', pr >= 1);
+        d.label.setAttribute('fill-opacity', pr > 0 ? .85 : .25);
+      });
+    },
+
+    overview(startId) {
+      this.panning = true;
+      const s = clamp(this.vbW / 300 * .85, .6, .95);
+      this.camera(Math.max(this.vbW / 2 / s, 60), s, 0);
+      requestAnimationFrame(() => { if (this.panning) this.camera(this.totalW - this.vbW / 2 / s, s, 22000, 'linear'); });
+    },
+    stopPan() {
+      if (!this.panning) return; this.panning = false;
+      const m = new DOMMatrix(getComputedStyle(this.world).transform);
+      this.camera(this.cxFromMatrix(m), this.scale, 0);
+    },
+    cxFromMatrix(m) { // world: translate(vbW/2,G) scale(s) translate(-cx,-G)  =>  e = vbW/2 - s*cx
+      return (this.vbW / 2 - m.e) / this.scale;
+    },
+    drag(dx) {   // dx in px dello schermo
+      const r = this.svg.getBoundingClientRect(), k = this.vbW / r.width;
+      let cx = this.cx - dx * k / this.scale;
+      cx = clamp(cx, 0, this.totalW);
+      this.camera(cx, this.scale, 0);
+    },
+    colorOf(id) { return this.districts[id].color; }
+  };
+  window.City = City;
+})();
+
+</script>
+<script>
+/* Punteggi e indicatori di qualità, secondo Questionario_CEnTRO_v0.4 (sez. 7 e 9).
+   Nessuna norma: si descrive la posizione sulla scala, non si classifica la persona. */
+(function () {
+  const Q = window.QDATA, C = window.CFG;
+  const avg = a => a.reduce((s, v) => s + v, 0) / a.length;
+  const minFor = n => n >= 6 ? 5 : n === 4 ? 3 : 2;          // sez. 7.1: 6→5, 4→3, 3→2, 2→2
+  const isLik = q => q.fmt === 'L5';
+
+  /* sez. 7.2: media degli item validi dopo l'inversione (6−x), poi 25 × (S − 1) */
+  function scoreItems(items, ans) {
+    const vals = [], plus = [], rev = [];
+    items.forEach(q => {
+      const a = ans[q.code]; if (a == null) return;
+      const isR = q.key === 'R', x = isR ? 6 - a : a;
+      vals.push(x); (isR ? rev : plus).push(x);
+    });
+    const total = items.length, min = minFor(total);
+    if (vals.length < min) return { avail: false, n: vals.length, total, min };
+    const mean = avg(vals);
+    /* coerenza interna: distanza tra la media degli item + e quella degli item R (già invertiti) */
+    const gap = plus.length && rev.length ? Math.abs(avg(plus) - avg(rev)) : null;
+    return { avail: true, score: 25 * (mean - 1), mean, n: vals.length, total, gap,
+      coh: gap == null ? null : gap > 2 ? 'bassa' : gap > 1 ? 'media' : 'alta' };
+  }
+
+  const scaleQs = (block, re) => Q.filter(q => q.block === block && !q.pilot && re.test(q.code));
+
+  function scales(ans) {
+    return C.scales.map(sc => Object.assign({ def: sc }, scoreItems(scaleQs(sc.block, sc.re), ans)));
+  }
+  /* sez. 7.4: indice = 100 × (x_b − x_a + 4) / 8, senza inversione */
+  function prefs(ans) {
+    return C.prefs.map(p => {
+      const a = ans[p.id + 'a'], b = ans[p.id + 'b'];
+      return Object.assign({ def: p }, a == null || b == null ? { avail: false } : { avail: true, score: 100 * (b - a + 4) / 8, a, b });
+    });
+  }
+  function home(ans) {
+    return C.areas.map(ar => {
+      const live = scoreItems(scaleQs('B1', new RegExp('^' + ar.pre + '\\d$')), ans);
+      const ideal = scoreItems(scaleQs('B3', new RegExp('^' + ar.amb + '\\d$')), ans);
+      const imp = ans['IMP' + (C.areas.indexOf(ar) < 2 ? C.areas.indexOf(ar) + 1 : C.areas.indexOf(ar) + 2)]; // IMP3 è il fumo
+      return { def: ar, live, ideal, imp: imp == null ? null : imp };
+    });
+  }
+  const band = s => s <= 33 ? 0 : s <= 66 ? 1 : 2;
+
+  /* fumo (sez. 8.3): C = comportamento, R = regola accettata */
+  function smoking(ans) {
+    const f1 = ans.FU1, f2 = ans.FU2, f3 = ans.FU3;
+    const c = f1 == null ? null : f1 === 0 ? -1 : (f2 == null ? null : f2);
+    return { c, r: f3 == null ? null : f3, f1, f2, f3 };
+  }
+
+  /* indicatori di qualità delle risposte (sez. 7.6): soglie provvisorie, da stimare sul pilota */
+  function quality(S, sc) {
+    const ans = S.answers, out = { flags: [], items: [] };
+    const add = (label, value, state, note) => out.items.push({ label, value, state, note: note || '' });
+    let failed = false;
+    [['AT1', 4], ['AT2', 2]].forEach(([c, ok]) => {
+      if (ans[c] == null) return;
+      const good = ans[c] === ok; if (!good) { failed = true; out.flags.push('domanda di attenzione ' + c + ' sbagliata'); }
+      add('Domanda di attenzione ' + c, good ? 'Corretta' : 'Errata', good ? 'ok' : 'bad');
+    });
+    [['SR1', 'Autovalutazione parte A'], ['SR2', 'Autovalutazione parte B']].forEach(([c, l]) => {
+      if (ans[c] == null) return;
+      const v = ['Sì', 'In parte', 'No'][ans[c]]; const st = ans[c] === 0 ? 'ok' : ans[c] === 1 ? 'warn' : 'bad';
+      if (ans[c] === 2) out.flags.push(l + ': «No»');
+      add(l + ' (' + c + ')', v, st);
+    });
+    const im = ['IM1', 'IM2', 'IM3', 'IM4', 'IM5', 'IM6'];
+    if (im.every(c => ans[c] != null)) {
+      const pts = (ans.IM1 === 5) + (ans.IM2 === 5) + (ans.IM3 === 5) + (ans.IM4 === 5) + (ans.IM5 === 1) + (ans.IM6 === 1);
+      add('Impression management (0–6)', String(pts), pts >= 5 ? 'warn' : 'ok', 'Solo ricerca: nessuna correzione individuale.');
+      if (pts >= 5) out.flags.push('molte risposte «perfette» (impression management alto)');
+    }
+    // sequenze identiche e tempi sugli item Likert in ordine di risposta
+    const seq = S.seq.filter(c => { const q = byCode[c]; return q && isLik(q) && !q.pilot; });
+    if (seq.length >= 10) {
+      let best = 1, run = 1;
+      for (let i = 1; i < seq.length; i++) { run = ans[seq[i]] === ans[seq[i - 1]] ? run + 1 : 1; best = Math.max(best, run); }
+      add('Risposte identiche di fila (max)', String(best), best >= 10 ? 'warn' : 'ok', 'Soglia provvisoria: 10.');
+      if (best >= 10) out.flags.push('sequenza di ' + best + ' risposte identiche');
+    }
+    const ts = seq.map(c => S.times[c]).filter(t => t != null && t < 90000).sort((a, b) => a - b);
+    if (ts.length >= 10) {
+      const med = ts[Math.floor(ts.length / 2)] / 1000;
+      add('Tempo mediano per domanda', med.toFixed(1) + ' s', med < 1.5 ? 'warn' : 'ok', 'Soglia provvisoria: 1,5 s.');
+      if (med < 1.5) out.flags.push('risposte molto rapide');
+    }
+    // tendenza ad essere d'accordo: quota di risposte ≥4 sugli item di scala (chiavi bilanciate → attesa ≈ 50%)
+    const sq = Q.filter(q => isLik(q) && !q.pilot && q.block !== 'A4' && ans[q.code] != null);
+    if (sq.length >= 20) {
+      const share = sq.filter(q => ans[q.code] >= 4).length / sq.length;
+      add('Quota di risposte «d\'accordo»', Math.round(share * 100) + '%', share > .7 || share < .25 ? 'warn' : 'ok',
+        'Con item bilanciati ci si aspetta una quota intermedia.');
+      if (share > .7) out.flags.push('tendenza ad essere d\'accordo con tutto');
+    }
+    // coerenza interna: scale con item + e R molto discordanti
+    const withCoh = sc.filter(s => s.avail && s.coh);
+    if (withCoh.length) {
+      const bad = withCoh.filter(s => s.coh === 'bassa').length;
+      add('Scale con risposte poco coerenti', bad + ' su ' + withCoh.length, bad / withCoh.length > .34 ? 'warn' : 'ok',
+        'Coerenza = distanza tra item formulati in un senso e nell\'altro (soglie provvisorie: >1 media, >2 bassa).');
+      if (bad / withCoh.length > .34) out.flags.push('molte scale con risposte incoerenti');
+    }
+    out.level = failed || out.flags.length >= 3 ? 'bassa' : out.flags.length ? 'cautela' : 'buona';
+    out.enough = out.items.length > 0;
+    return out;
+  }
+
+  const byCode = {}; Q.forEach(q => byCode[q.code] = q);
+  window.Score = { scoreItems, scales, prefs, home, band, smoking, quality, byCode };
+})();
+
+</script>
+<script>
+/* CEnTRO · questionario v0.4 (versione di prova) */
+(function () {
+  const Q = window.QDATA, C = window.CFG, Sc = window.Score, City = window.City;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const byCode = Sc.byCode, blockById = {}; C.blocks.forEach(b => blockById[b.id] = b);
+  const LV = ['#F06139', '#D43998', '#8B1EBA', '#471EBA', '#1E42BA'];
+  const stripNum = q => q.opts.map(o => (q.fmt !== 'SC' || /^FU/.test(q.code)) ? o.replace(/^\d+\s/, '') : o);
+
+  /* sotto-categorie degli interessi, ricavate dalle note delle domande */
+  Q.filter(q => q.fmt === 'INT4').forEach(q => {
+    const m = q.note.match(/:\s*([^:]+?)\.?$/);
+    C.interestSubs[q.code] = m ? m[1].split(';').map(s => { s = s.trim(); return s.charAt(0).toUpperCase() + s.slice(1); }) : [];
   });
+  byCode.OPP1.opts = C.oppOptions.slice();
 
-  document.getElementById('statusbar').innerHTML = `<span>${total}</span> coppie visualizzate${q ? ` per "<span>${q}</span>"` : ''}`;
-  document.getElementById('total-count').textContent = total;
-  empty.classList.toggle('show', total === 0);
-}
+  /* ---------- stato ---------- */
+  const KEY = 'centro_questionario_v04';
+  const fresh = () => ({ answers: {}, subs: {}, times: {}, seq: [], selected: ['A1'], opt: { pilot: true, faces: true, auto: true }, done: {}, seed: (Math.random() * 1e6) | 0 });
+  let S; try { S = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch (e) { S = fresh(); }
+  S = Object.assign(fresh(), S); S.opt = Object.assign({ pilot: true, faces: true, auto: true }, S.opt);
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } };
 
-function highlight(text, q) {
-  if (!q) return text;
-  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return text.replace(re, `<mark style="background:rgba(200,240,96,0.25);color:var(--accent);border-radius:2px;padding:0 2px;">$1</mark>`);
-}
+  /* ---------- domande per blocco ---------- */
+  const blkQs = id => Q.filter(q => q.block === id && !q.pilot);
+  const active = q => q.code !== 'FU2' || S.answers.FU1 == null || S.answers.FU1 >= 1;
+  const isAns = q => { const a = S.answers[q.code]; return a != null && (!Array.isArray(a) || a.length > 0); };
+  function blockStat(id) {
+    const qs = blkQs(id).filter(active), n = qs.filter(isAns).length;
+    return { n, total: qs.length, p: qs.length ? n / qs.length : 0 };
+  }
+  function progAll() {
+    const prog = {}; let n = 0, t = 0;
+    C.blocks.forEach(b => { const s = blockStat(b.id); prog[b.id] = s.p; n += s.n; t += s.total; });
+    return { prog, g: t ? n / t : 0 };
+  }
+  const minutes = id => { const n = blkQs(id).length; return Math.max(1, Math.round((id === 'A5' ? n * 11 : n * 7) / 60)); };
 
-function exportCsv() {
-  const rows = [["Categoria","Polo A","Polo B"]];
-  DATA.forEach(s => s.pairs.forEach(([a, b]) => rows.push([s.cat, a, b])));
-  const csv = rows.map(r => r.map(c => `"${c.replace(/"/g,'""')}"`).join(',')).join('\r\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'coppie_opposti_target.csv'; a.click();
-  URL.revokeObjectURL(url);
-}
+  /* ---------- coda delle domande ---------- */
+  function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  /* alterna i tratti: mai due item dello stesso gruppo di fila, se evitabile */
+  function interleave(qs, rnd, keyOf) {
+    const g = {}; qs.forEach(q => (g[keyOf(q)] = g[keyOf(q)] || []).push(q));
+    Object.values(g).forEach(a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } });
+    const out = []; let last = null;
+    while (out.length < qs.length) {
+      let keys = Object.keys(g).filter(k => g[k].length), cand = keys.filter(k => k !== last); if (!cand.length) cand = keys;
+      const tot = cand.reduce((s, k) => s + g[k].length, 0); let r = rnd() * tot, pick = cand[0];
+      for (const k of cand) { r -= g[k].length; if (r <= 0) { pick = k; break; } }
+      out.push(g[pick].shift()); last = pick;
+    }
+    return out;
+  }
+  const keyOf = { A1: q => q.code.replace(/\d+$/, ''), A2: q => q.code.replace(/\d+$/, ''), A3: q => q.code.replace(/\d+$/, ''), B1: q => q.code.replace(/\d+$/, ''), B3: q => q.code.slice(0, 4) };
 
-buildTabs();
-render();
+  function buildQueue() {
+    const sel = C.blocks.map(b => b.id).filter(id => S.selected.includes(id)), rnd = mulberry(S.seed), items = [];
+    const push = (blk, code) => items.push({ t: 'q', code, blk });
+    sel.forEach(id => {
+      if (id === 'A5') { items.push({ t: 'int', blk: 'A5' }); ['MOT1', 'SRV1', 'SRV2', 'SRV3', 'SRV4', 'OPP1', 'OPP2'].forEach(c => push('A5', c)); return; }
+      let qs = blkQs(id); if (keyOf[id]) qs = interleave(qs, rnd, keyOf[id]);
+      qs.forEach(q => push(id, q.code));
+    });
+    if (S.opt.pilot) {
+      const range = ids => { const ix = items.map((e, i) => ids.includes(e.blk) ? i : -1).filter(i => i >= 0); return ix.length ? [ix[0], ix[ix.length - 1]] : null; };
+      const ins = (idx, code) => items.splice(idx, 0, { t: 'q', code, blk: items[Math.max(0, idx - 1)].blk });
+      const rA = range(['A1', 'A2', 'A3']);
+      if (rA) {
+        const len = rA[1] - rA[0] + 1;
+        [['IM1', .1], ['IM2', .22], ['IM3', .34], ['AT1', .5], ['IM4', .62], ['IM5', .76], ['IM6', .9]].reverse().forEach(([c, f]) => ins(rA[0] + Math.floor(f * len), c));
+      }
+      const pa = items.map((e, i) => blockById[e.blk].part === 'A' ? i : -1).filter(i => i >= 0);
+      if (pa.length) ins(pa[pa.length - 1] + 1, 'SR1');
+      const rB = range(['B1']); if (rB) ins(rB[0] + Math.floor((rB[1] - rB[0] + 1) / 2), 'AT2');
+      const pb = items.map((e, i) => blockById[e.blk].part === 'B' ? i : -1).filter(i => i >= 0);
+      if (pb.length) ins(pb[pb.length - 1] + 1, 'SR2');
+    }
+    return items;
+  }
+  const entryActive = e => e.t === 'int' || active(byCode[e.code]);
+  const entryDone = e => e.t === 'int' ? Q.filter(q => q.fmt === 'INT4').every(isAns) : isAns(byCode[e.code]);
+
+  /* ---------- run ---------- */
+  let R = { queue: [], i: 0, sess: new Set() }, view = 'setup', timer = null, t0 = 0, edit = null;
+  const stage = $('#stage'), setTop = (t, p) => { $('#topTitle').textContent = t; if (p != null) $('#topBar').style.width = (p * 100).toFixed(1) + '%'; };
+  /* nel percorso normale non si mostra mai una risposta data in precedenza: solo quelle date in questa sessione (o in modifica dal sommario) */
+  const cur = code => (edit || R.sess.has(code)) ? S.answers[code] : undefined;
+  const curSubs = code => (edit || R.sess.has(code)) ? (S.subs[code] || []) : [];
+  const cancelAuto = () => { clearTimeout(timer); timer = null; };
+  const fmtN = n => n.toLocaleString('it-IT', { maximumFractionDigits: 0 });
+
+  function refreshCity(focus, dur) {
+    const { prog, g } = progAll();
+    City.render(prog, g);
+    if (focus) City.focus(focus, dur);
+    return { prog, g };
+  }
+  function hud(blk) {
+    const b = blockById[blk], s = blockStat(blk), { g } = progAll();
+    $('#hud').innerHTML = `<span class="chip">${esc(b.district)} · <b>${s.n}/${s.total}</b></span><span class="chip">Città <b>${Math.round(g * 100)}%</b></span>`;
+  }
+  function sessionProgress() {
+    let n = 0, t = 0;
+    R.queue.forEach(e => { if (!entryActive(e)) return; const w = e.t === 'int' ? 15 : 1; t += w; n += e.t === 'int' ? Q.filter(q => q.fmt === 'INT4' && isAns(q)).length : (isAns(byCode[e.code]) ? 1 : 0); });
+    return t ? n / t : 0;
+  }
+  function tall(on) { $('#cityWrap').classList.toggle('tall', !!on); }
+  function go(v) { view = v; cancelAuto(); stage.scrollTop = 0; }
+
+  /* ---------- schermata: scelta aree ---------- */
+  function setupView() {
+    go('setup'); tall(false); edit = null;
+    const { g } = refreshCity(S.selected[0] || 'A1', 900); hud(S.selected[0] || 'A1');
+    $('#backBtn').disabled = true; $('#menuBtn').disabled = true; setTop('CEnTRO · versione di prova', g);
+    const parts = [['A', 'Parte A · App generale'], ['B', 'Parte B · Affitti'], ['C', 'Parte C · Chiusura']];
+    const rows = parts.map(([p, name]) => {
+      const bs = C.blocks.filter(b => b.part === p), allOn = bs.every(b => S.selected.includes(b.id));
+      return `<div class="part"><span>${name}</span>${bs.length > 1 ? `<button data-part="${p}">${allOn ? 'Deseleziona tutta' : 'Seleziona tutta'}</button>` : ''}</div>` +
+        bs.map(b => {
+          const s = blockStat(b.id), on = S.selected.includes(b.id), done = s.total && s.n === s.total;
+          return `<button class="area ${on ? 'on' : ''}" data-blk="${b.id}"><span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <span><div class="nm">${esc(b.id)} · ${esc(b.title)}</div><div class="ds">${s.total} domande · circa ${minutes(b.id)} min</div></span>
+          <span class="st ${done ? 'done' : ''}">${done ? '✓ fatto' : s.n ? s.n + '/' + s.total : ''}</span></button>`;
+        }).join('');
+    }).join('');
+    const nSel = S.selected.length, anyAns = Object.keys(S.answers).length;
+    stage.innerHTML = `<div class="view"><div class="grow1">
+      <div class="kicker">Versione di prova · v0.4</div><h1>Costruisci la tua città</h1>
+      <p>Ogni risposta fa salire un edificio, ogni blocco completato apre un quartiere. Scegli le aree da compilare adesso: le risposte restano salvate su questo dispositivo, quindi puoi fermarti e riprendere.</p>
+      ${rows}
+      <div class="part"><span>Opzioni di prova</span></div>
+      <div class="card" style="padding:6px 16px">
+        ${tg('pilot', 'Domande di controllo (solo pilota)', 'Inserisce 6 item di impression management, 2 di attenzione e 2 di autovalutazione, come da documento. Servono a stimare l\'affidabilità delle risposte.')}
+        ${tg('faces', 'Faccine sulla scala', 'Se disattivato, la scala mostra solo i numeri da 1 a 5.')}
+        ${tg('auto', 'Avanza da solo dopo la risposta', 'Passa alla domanda successiva poco dopo aver risposto. Puoi sempre tornare indietro.')}
+      </div>
+      <div class="pad"></div></div>
+      <div class="foot"><div class="row">${anyAns ? '<button class="btn ghost" id="sumBtn">Sommario</button>' : ''}<button class="btn" id="goBtn" ${nSel ? '' : 'disabled'}>${nSel ? 'Inizia · ' + nSel + (nSel === 1 ? ' area' : ' aree') : 'Scegli almeno un\'area'}</button></div>
+      ${anyAns ? '<p class="small center muted" style="margin:10px 0 0"><button id="resetBtn" style="text-decoration:underline">Azzera tutte le risposte</button></p>' : ''}</div></div>`;
+    $$('.area', stage).forEach(b => b.onclick = () => { const id = b.dataset.blk, i = S.selected.indexOf(id); i >= 0 ? S.selected.splice(i, 1) : S.selected.push(id); save(); setupView(); });
+    $$('[data-part]', stage).forEach(b => b.onclick = () => {
+      const ids = C.blocks.filter(x => x.part === b.dataset.part).map(x => x.id), all = ids.every(x => S.selected.includes(x));
+      S.selected = S.selected.filter(x => !ids.includes(x)); if (!all) S.selected.push(...ids); save(); setupView();
+    });
+    $$('[data-tg]', stage).forEach(b => b.onclick = () => { S.opt[b.dataset.tg] = !S.opt[b.dataset.tg]; save(); setupView(); });
+    $('#goBtn', stage).onclick = startRun;
+    if ($('#sumBtn', stage)) $('#sumBtn', stage).onclick = summaryView;
+    if ($('#resetBtn', stage)) $('#resetBtn', stage).onclick = () => { if (confirm('Cancellare tutte le risposte salvate su questo dispositivo?')) { const o = S.opt, sel = S.selected; S = fresh(); S.opt = o; S.selected = sel; save(); setupView(); } };
+  }
+  const tg = (k, t, d) => `<button class="toggle" data-tg="${k}" style="width:100%;text-align:left"><span><div class="tt">${t}</div><div class="td">${d}</div></span><span class="sw ${S.opt[k] ? 'on' : ''}"></span></button>`;
+
+  function startRun() {
+    R = { queue: buildQueue(), i: 0, sess: new Set() };
+    let i = R.queue.findIndex(e => entryActive(e) && !entryDone(e)); if (i < 0) i = 0;
+    R.i = i; R.queue.forEach(e => e.blk); introView(R.i, true);
+  }
+
+  /* ---------- introduzione del blocco ---------- */
+  function introView(idx, fromStart) {
+    go('intro'); tall(false); const e = R.queue[idx], b = blockById[e.blk], s = blockStat(b.id);
+    refreshCity(b.id, 1100); hud(b.id);
+    $('#backBtn').disabled = false; $('#menuBtn').disabled = false; setTop(b.title, sessionProgress());
+    stage.innerHTML = `<div class="view"><div class="grow1"><div class="card">
+      <div class="kicker">Parte ${b.part} · ${esc(b.district)}</div><h2 style="font-size:24px;margin-top:6px">${esc(b.id)} · ${esc(b.title)}</h2>
+      <p class="muted" style="margin-bottom:14px">${esc(b.sub)}</p>
+      <p style="font-size:16.5px;line-height:1.5;color:var(--ink)">${esc(b.intro)}</p>
+      <div class="stats"><div class="stat"><b>${s.total}</b><span>domande</span></div><div class="stat"><b>~${minutes(b.id)} min</b><span>di tempo</span></div><div class="stat"><b>${s.n}</b><span>già fatte</span></div></div>
+      <p class="small muted" style="margin:0">Non ci sono risposte giuste o sbagliate. Rispondi d'istinto: la prima impressione è quasi sempre la più fedele.</p></div></div>
+      <div class="foot"><button class="btn" id="startBtn">${s.n && s.n < s.total ? 'Riprendi' : 'Cominciamo'}</button></div></div>`;
+    $('#startBtn').onclick = () => {
+      let j = idx; for (let k = idx; k < R.queue.length && R.queue[k].blk === b.id; k++) { if (entryActive(R.queue[k]) && !entryDone(R.queue[k])) { j = k; break; } }
+      R.i = j; qView();
+    };
+  }
+
+  /* ---------- glifi ---------- */
+  function faceSVG(v, on) {
+    const col = LV[v - 1], line = on ? '#fff' : '#8b8b96', fill = on ? col : '#fff', stroke = on ? col : 'rgba(20,20,20,.22)';
+    const brow = { 1: 'M13 19L20 16M35 19L28 16', 2: 'M13 18.2L20 17M35 18.2L28 17', 3: 'M13 17.5H20M28 17.5H35', 4: '', 5: 'M13 15Q16.5 12 20 14M28 14Q31.5 12 35 15' }[v];
+    const mouth = { 1: 'M15 34Q24 27 33 34', 2: 'M16 33Q24 29.5 32 33', 3: 'M16 31.5H32', 4: 'M15 29Q24 36 33 29', 5: 'M14 28Q24 41 34 28Z' }[v];
+    const eyes = v === 5 ? `<path d="M15.5 23.5Q19 19 22.5 23.5M25.5 23.5Q29 19 32.5 23.5" fill="none" stroke="${line}" stroke-width="2.4" stroke-linecap="round"/>` :
+      `<circle cx="19" cy="22.5" r="2.2" fill="${line}"/><circle cx="29" cy="22.5" r="2.2" fill="${line}"/>`;
+    return `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="${fill}" stroke="${stroke}" stroke-width="2.4"/>${brow ? `<path d="${brow}" stroke="${line}" stroke-width="2.2" stroke-linecap="round" fill="none"/>` : ''}${eyes}
+      <path d="${mouth}" stroke="${line}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="${v === 5 ? (on ? 'rgba(255,255,255,.95)' : '#eee') : 'none'}"/></svg>`;
+  }
+  function numGlyph(v, on) { return `<div class="n" style="${on ? 'background:' + LV[v - 1] : ''}">${v}</div>`; }
+  function barsGlyph(v, on) {
+    const col = on ? LV[v - 1] : '#bdbdc6';
+    return `<svg viewBox="0 0 48 48" style="width:min(42px,13vw);height:min(42px,13vw)">${[1, 2, 3, 4, 5].map(i => `<rect x="${4 + (i - 1) * 8.6}" y="${42 - i * 7.6}" width="6" height="${i * 7.6}" rx="2" fill="${i <= v ? col : '#e6e6ec'}"/>`).join('')}</svg>`;
+  }
+
+  /* ---------- domanda ---------- */
+  function qView() {
+    const e = R.queue[R.i]; go('q'); tall(false); cancelAuto();
+    refreshCity(e.blk, 900); hud(e.blk);
+    $('#backBtn').disabled = false; $('#menuBtn').disabled = false;
+    setTop(blockById[e.blk].title, sessionProgress());
+    if (e.t === 'int') return intView(false);
+    const q = byCode[e.code]; t0 = performance.now();
+    const cv = cur(q.code);
+    let body = '', needBtn = true;
+    if (q.fmt === 'L5' || q.fmt === 'IMP5') body = scaleHTML(q);
+    else if (q.fmt === 'SC') { body = optsHTML(q); needBtn = false; }
+    else if (q.fmt === 'SM') body = optsHTML(q, true);
+    else if (q.fmt === 'TXT') body = `<textarea id="txt" placeholder="Scrivi qui (facoltativo)…">${esc(typeof cv === 'string' ? cv : '')}</textarea><p class="small muted" style="margin-top:10px">Potrai vedere, modificare e cancellare in ogni momento quello che Nia salva nella tua memoria.</p>`;
+    const last = R.queue.slice(R.i + 1).every(x => !entryActive(x));
+    const btnTxt = q.fmt === 'TXT' ? 'Concludi' : (last ? 'Fine del blocco' : 'Avanti');
+    stage.innerHTML = `<div class="view"><div class="grow1"><div class="card">
+      <div class="kicker">${esc(blockById[e.blk].id)} · ${edit ? 'modifica' : R.queue.filter(entryActive).indexOf(e) + 1 + ' di ' + R.queue.filter(entryActive).length}</div>
+      <div class="qtext">${esc(q.text)}</div>${body}</div></div>
+      <div class="foot"><button class="btn" id="nextBtn" ${q.fmt === 'TXT' || cv != null ? '' : 'disabled'}>${btnTxt}</button></div></div>`;
+    $('#nextBtn').onclick = () => { if (q.fmt === 'TXT') setAnswer(q, ($('#txt').value || '').trim(), true); advance(); };
+    if (q.fmt === 'L5' || q.fmt === 'IMP5') bindScale(q);
+    else if (q.code && (q.fmt === 'SC')) $$('.opt', stage).forEach(b => b.onclick = () => {
+      setAnswer(q, +b.dataset.i); $$('.opt', stage).forEach(x => x.classList.toggle('sel', x === b)); $('#nextBtn').disabled = false;
+      if (q.code === 'FU1' && +b.dataset.i === 0) delete S.answers.FU2, save();
+      if (S.opt.auto && !edit) { cancelAuto(); timer = setTimeout(() => advance(), 420); }
+    });
+    else if (q.fmt === 'SM') bindMulti(q);
+    else if (q.fmt === 'TXT') { setTimeout(() => { try { $('#txt').focus({ preventScroll: true }); } catch (x) { } }, 300); }
+    if (edit) $('#nextBtn').textContent = 'Salva e torna al sommario';
+  }
+
+  function scaleHTML(q) {
+    const v = cur(q.code), labs = stripNum(q), imp = q.fmt === 'IMP5';
+    const glyph = i => imp ? barsGlyph(i, i === v) : S.opt.faces ? faceSVG(i, i === v) : numGlyph(i, i === v);
+    return `<div class="scale ${v ? 'has' : ''}" id="scale" tabindex="0" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="${v || ''}" aria-valuetext="${v ? esc(labs[v - 1]) : 'nessuna risposta'}" aria-label="${esc(q.text)}">
+      <div class="faces">${[1, 2, 3, 4, 5].map(i => `<div class="face ${i === v ? 'sel' : ''}" data-v="${i}">${glyph(i)}</div>`).join('')}</div>
+      <div class="rail"><div class="fill" style="width:${v ? (v - 1) * 25 : 0}%"></div>${[0, 1, 2, 3, 4].map(i => `<div class="dot" style="left:${i * 25}%"></div>`).join('')}<div class="thumb" style="left:${v ? (v - 1) * 25 : 0}%"></div></div>
+      <div class="ends"><span>${esc(labs[0])}</span><span>${esc(labs[4])}</span></div></div>
+      <span class="pill ${v ? '' : 'empty'}" id="pill">${v ? esc(labs[v - 1]) : 'Tocca o trascina'}</span>`;
+  }
+  function bindScale(q) {
+    const sc = $('#scale'), labs = stripNum(q), imp = q.fmt === 'IMP5';
+    let dragging = false, shown = cur(q.code) || 0;
+    const valAt = x => { const r = sc.getBoundingClientRect(), t = (x - r.left) / r.width; return clamp(Math.round((t - .1) / .2) + 1, 1, 5); };
+    const pct = x => { const r = sc.getBoundingClientRect(); return clamp(((x - r.left) / r.width - .1) / .8, 0, 1) * 100; };
+    const paint = (v, p) => {
+      shown = v; sc.classList.add('has');
+      const pp = p != null ? p : (v - 1) * 25;
+      $('.thumb', sc).style.left = pp + '%'; $('.fill', sc).style.width = pp + '%';
+      $$('.face', sc).forEach(f => {
+        const i = +f.dataset.v, on = i === v; f.classList.toggle('sel', on);
+        f.innerHTML = imp ? barsGlyph(i, on) : S.opt.faces ? faceSVG(i, on) : numGlyph(i, on);
+      });
+      const pill = $('#pill'); pill.textContent = labs[v - 1]; pill.classList.remove('empty');
+      sc.setAttribute('aria-valuenow', v); sc.setAttribute('aria-valuetext', labs[v - 1]);
+    };
+    sc.addEventListener('pointerdown', e => { dragging = true; cancelAuto(); try { sc.setPointerCapture(e.pointerId); } catch (x) { } sc.classList.add('drag'); paint(valAt(e.clientX), pct(e.clientX)); });
+    sc.addEventListener('pointermove', e => { if (dragging) paint(valAt(e.clientX), pct(e.clientX)); });
+    const end = e => { if (!dragging) return; dragging = false; sc.classList.remove('drag'); paint(shown); commit(shown); };
+    sc.addEventListener('pointerup', end);
+    sc.addEventListener('pointercancel', () => { dragging = false; sc.classList.remove('drag'); if (cur(q.code)) paint(cur(q.code)); });
+    sc.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); paint(clamp((shown || 0) + 1, 1, 5)); commit(shown, 700); }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); paint(clamp((shown || 2) - 1, 1, 5)); commit(shown, 700); }
+      else if (e.key === 'Enter' && cur(q.code)) advance();
+      else if (/^[1-5]$/.test(e.key)) { paint(+e.key); commit(+e.key, 500); }
+    });
+    function commit(v, delay) {
+      setAnswer(q, v); $('#nextBtn').disabled = false;
+      if (navigator.vibrate) try { navigator.vibrate(8); } catch (x) { }
+      cancelAuto(); if (S.opt.auto && !edit) timer = setTimeout(advance, delay || 520);
+    }
+    sc.focus({ preventScroll: true });
+  }
+
+  function optsHTML(q, multi) {
+    const labs = stripNum(q), cv = cur(q.code), max = /massimo due/.test(q.text) ? 2 : /massimo tre/.test(q.text) ? 3 : 0;
+    const hint = multi ? `<p class="hint">${max ? 'Scegli al massimo ' + (max === 2 ? 'due' : 'tre') + ' risposte.' : 'Puoi scegliere più risposte.'}</p>` : '';
+    return hint + labs.map((l, i) => {
+      const sel = multi ? Array.isArray(cv) && cv.includes(i) : cv === i;
+      return `<button class="opt ${multi ? 'multi' : ''} ${sel ? 'sel' : ''}" data-i="${i}"><span class="rd"><svg viewBox="0 0 24 24" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>${esc(l)}</span></button>`;
+    }).join('') + (q.code === 'OPP1' ? '<p class="small muted">Elenco provvisorio: sarà definito dal prodotto.</p>' : '');
+  }
+  function bindMulti(q) {
+    const max = /massimo due/.test(q.text) ? 2 : /massimo tre/.test(q.text) ? 3 : 0, labs = stripNum(q), none = labs.indexOf('Nessuno');
+    $$('.opt', stage).forEach(b => b.onclick = () => {
+      const i = +b.dataset.i; let a = Array.isArray(cur(q.code)) ? cur(q.code).slice() : [];
+      if (a.includes(i)) a = a.filter(x => x !== i);
+      else {
+        if (i === none) a = [i]; else { a = a.filter(x => x !== none); if (max && a.length >= max) { b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); return; } a.push(i); }
+      }
+      a.sort((x, y) => x - y); setAnswer(q, a.length ? a : undefined);
+      $$('.opt', stage).forEach(x => x.classList.toggle('sel', a.includes(+x.dataset.i))); $('#nextBtn').disabled = !a.length;
+    });
+  }
+
+  function setAnswer(q, v, silent) {
+    const code = q.code, first = !R.sess.has(code); R.sess.add(code);
+    if (v === undefined) delete S.answers[code]; else S.answers[code] = v;
+    if (first && v !== undefined && q.fmt !== 'TXT') { S.times[code] = Math.round(performance.now() - t0); S.seq = S.seq.filter(c => c !== code); S.seq.push(code); }
+    save();
+    if (!silent) { const blk = R.queue[R.i] ? R.queue[R.i].blk : q.block; if (view === 'q' || view === 'int') { refreshCity(null); hud(blk); setTop(blockById[blk].title, sessionProgress()); } }
+  }
+
+  /* ---------- interessi: una schermata con tutte le aree ---------- */
+  function intView(edt) {
+    go(edt ? 'edit' : 'q'); const ints = Q.filter(q => q.fmt === 'INT4'); t0 = performance.now();
+    const row = q => {
+      const v = cur(q.code), subs = curSubs(q.code);
+      return `<div class="int" id="r-${q.code}"><div class="h"><span>${esc(q.construct)}</span></div>
+        <div class="seg">${C.intLabels.map((l, i) => `<button data-c="${q.code}" data-v="${i}" class="${v === i ? 'sel' : ''}" style="${v === i ? 'background:' + LV[[0, 2, 3, 4][i]] : ''}">${l}</button>`).join('')}</div>
+        ${v >= 1 ? `<div class="subs"><span class="lbl">Cosa in particolare? (facoltativo)</span>${C.interestSubs[q.code].map(s => `<button data-c="${q.code}" data-s="${esc(s)}" class="${subs.includes(s) ? 'sel' : ''}">${esc(s)}</button>`).join('')}</div>` : ''}</div>`;
+    };
+    const paintAll = () => { const n = ints.filter(x => cur(x.code) != null).length; $('#nextBtn').disabled = n < ints.length; $('#intCount').textContent = n + ' di ' + ints.length; };
+    stage.innerHTML = `<div class="view"><div class="grow1"><div class="card" style="padding-bottom:12px">
+      <div class="kicker">A5 · Interessi · <span id="intCount"></span></div><div class="qtext" style="min-height:0;margin-bottom:14px">Quanto ti interessa?</div>
+      <p class="small muted">Scegli per ogni area. Da «Potrei provare» in su puoi indicare cosa in particolare.</p></div>
+      <div style="height:10px"></div><div id="intRows">${ints.map(row).join('')}</div></div>
+      <div class="foot"><button class="btn" id="nextBtn" disabled>${edt ? 'Salva e torna al sommario' : 'Avanti'}</button></div></div>`;
+    paintAll();
+    $('#intRows').onclick = e => {
+      const b = e.target.closest('button'); if (!b) return; const q = byCode[b.dataset.c];
+      if (b.dataset.v != null) {
+        const first = !R.sess.has(q.code); R.sess.add(q.code); S.answers[q.code] = +b.dataset.v; if (first) { S.subs[q.code] = []; S.times[q.code] = Math.round(performance.now() - t0); t0 = performance.now(); S.seq = S.seq.filter(c => c !== q.code); S.seq.push(q.code); }
+        if (S.answers[q.code] === 0) delete S.subs[q.code];
+      } else if (b.dataset.s != null) {
+        const a = curSubs(q.code).slice(), i = a.indexOf(b.dataset.s); i >= 0 ? a.splice(i, 1) : a.push(b.dataset.s); S.subs[q.code] = a;
+      }
+      save(); $('#r-' + q.code).outerHTML = row(q); paintAll(); refreshCity(null); hud('A5'); if (!edt) setTop(blockById.A5.title, sessionProgress());
+    };
+    $('#nextBtn').onclick = () => edt ? summaryView() : advance();
+  }
+
+  /* ---------- avanti / indietro ---------- */
+  function advance() {
+    cancelAuto(); if (edit) return summaryView();
+    const cur = R.queue[R.i]; let j = R.i + 1; while (j < R.queue.length && !entryActive(R.queue[j])) j++;
+    const nx = R.queue[j];
+    if (!nx || nx.blk !== cur.blk) return blockDone(cur.blk, j);
+    R.i = j; qView();
+  }
+  function back() {
+    cancelAuto();
+    if (view === 'summary') return setupView();
+    if (view === 'edit') return summaryView();
+    if (view === 'setup') return;
+    if (view === 'intro') return setupView();
+    let j = R.i - 1; while (j >= 0 && !entryActive(R.queue[j])) j--;
+    if (j < 0) return introView(R.i);
+    R.i = j; qView();
+  }
+
+  /* ---------- blocco completato ---------- */
+  function blockDone(id, nextIdx) {
+    const nx = R.queue[nextIdx];
+    const first = !S.done[id]; S.done[id] = true; save();
+    if (!first && nx) return introView(nextIdx);
+    if (!first && !nx) return summaryView();
+    go('done'); tall(true); const b = blockById[id];
+    refreshCity(id, 1000); hud(id); setTop(b.title, sessionProgress());
+    const s = blockStat(id), { g } = progAll();
+    stage.innerHTML = `<div class="view"><div class="grow1"><div class="card center">
+      <div class="kicker">Quartiere completato</div><h2 style="font-size:24px;margin:8px 0">${esc(b.district)}</h2>
+      <p style="font-size:16px;color:var(--ink)">${esc(b.done)}</p>
+      <div class="stats"><div class="stat"><b>${s.n}</b><span>risposte</span></div><div class="stat"><b>${Math.round(g * 100)}%</b><span>della città</span></div></div></div></div>
+      <div class="foot"><div class="row"><button class="btn ghost" id="sumBtn">Sommario</button><button class="btn" id="contBtn">${nx ? 'Prossimo blocco' : 'Concludi'}</button></div></div></div>`;
+    $('#sumBtn').onclick = summaryView;
+    $('#contBtn').onclick = () => nx ? introView(nextIdx) : summaryView();
+  }
+
+  /* ---------- sommario ---------- */
+  let tab = 'profilo', tabPicked = false;
+  function autoTab() {
+    const a = S.answers, sc = Sc.scales(a), has = c => Q.some(q => q.code.startsWith(c) && a[q.code] != null);
+    if (sc.some(s => s.avail) || Sc.prefs(a).some(p => p.avail)) return 'profilo';
+    if (has('PR') || has('AMB') || a.FU1 != null || a.IMP1 != null) return 'casa';
+    if (Q.some(q => q.fmt === 'INT4' && a[q.code] != null) || a.MOT1 != null) return 'interessi';
+    return 'risposte';
+  }
+  function summaryView(t) {
+    go('summary'); tall(true); edit = null;
+    if (typeof t === 'string') { tab = t; tabPicked = true; } else if (!tabPicked) tab = autoTab();
+    const { g } = refreshCity(null); $('#backBtn').disabled = false; $('#menuBtn').disabled = false; setTop('Il tuo sommario', g);
+    $('#hud').innerHTML = `<span class="chip">La tua città · <b>${Math.round(g * 100)}%</b></span><span class="chip">Trascina per esplorare</span>`;
+    City.overview();
+    const tabs = [['profilo', 'Profilo'], ['casa', 'Casa'], ['interessi', 'Interessi'], ['risposte', 'Risposte'], ['qualita', 'Qualità']];
+    const sc = Sc.scales(S.answers);
+    stage.innerHTML = `<div class="view"><div class="grow1"><div class="tabs">${tabs.map(([k, l]) => `<button class="tab ${k === tab ? 'on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
+      <div id="tabBody">${{ profilo: profiloTab, casa: casaTab, interessi: interessiTab, risposte: risposteTab, qualita: qualitaTab }[tab](sc)}</div><div class="pad"></div></div>
+      <div class="foot"><div class="row"><button class="btn ghost" id="expBtn">Esporta JSON</button><button class="btn" id="moreBtn">Compila altre aree</button></div></div></div>`;
+    $$('.tab', stage).forEach(b => b.onclick = () => summaryView(b.dataset.tab));
+    $('#moreBtn').onclick = setupView; $('#expBtn').onclick = exportJSON;
+    $$('[data-edit]', stage).forEach(b => b.onclick = () => editQ(b.dataset.edit));
+    requestAnimationFrame(() => $$('.mk[data-l]', stage).forEach(m => m.style.left = m.dataset.l + '%'));
+  }
+  const bandTxt = (s, A, B) => s.avail ? [`Più vicino a «${A}»`, `Posizione intermedia tra «${A}» e «${B}»`, `Più vicino a «${B}»`][Sc.band(s.score)] : '';
+  function barHTML(name, desc, s, A, B, extra) {
+    if (!s.avail) return `<div class="sc"><div class="hd"><span class="nm">${esc(name)}</span></div><div class="ds">${esc(desc)}</div><div class="na">Non ancora disponibile (${s.n} di ${s.total} risposte; ne servono almeno ${s.min}).</div></div>`;
+    const low = s.coh === 'bassa';
+    return `<div class="sc"><div class="hd"><span class="nm">${esc(name)}${extra || ''}</span><span class="val">${Math.round(s.score)}/100</span></div><div class="ds">${esc(desc)}</div>
+      <div class="track"><div class="mk ${low ? 'low' : ''}" data-l="${s.score.toFixed(1)}" style="left:50%"></div></div>
+      <div class="poles"><span>${esc(A)}</span><span>${esc(B)}</span></div>
+      <div class="band">${esc(bandTxt(s, A, B))}${s.coh ? ` <span class="tag ${s.coh === 'alta' ? 'ok' : s.coh === 'media' ? 'warn' : 'bad'}">coerenza ${s.coh}</span>` : ''}</div>
+      ${low ? '<div class="small muted" style="margin-top:4px">Le risposte a questa scala sono poco coerenti tra loro: leggi il risultato con cautela.</div>' : ''}</div>`;
+  }
+  function profiloTab(sc) {
+    const any = sc.some(s => s.avail) || Sc.prefs(S.answers).some(p => p.avail);
+    if (!any) return `<div class="card"><h2>Ancora niente da mostrare</h2><p>Completa almeno un blocco delle parti A1–A4 per vedere il tuo profilo.</p></div>`;
+    const cand = sc.filter(s => s.avail && !s.def.research && s.coh !== 'bassa').map(s => ({ s, d: Math.abs(s.score - 50) })).sort((a, b) => b.d - a.d).slice(0, 3).filter(x => x.d >= 17);
+    const lead = cand.length ? 'Le posizioni più marcate: ' + cand.map(({ s }) => `<b>${esc(s.def.label)}</b> (${s.score >= 50 ? 'verso «' + esc(s.def.B) + '»' : 'verso «' + esc(s.def.A) + '»'})`).join(', ') + '. Sono posizioni su una scala, non etichette: descrivono come ti sei descritto/a in questo momento.'
+      : 'Le tue risposte sono in posizione intermedia sulla maggior parte delle scale, oppure le scale sono ancora incomplete.';
+    const sec = (ids, title) => { const list = sc.filter(s => ids.includes(s.def.block)); return list.length ? `<div class="sec"><h2>${title}</h2>${list.map(s => barHTML(s.def.label, s.def.desc, s, s.def.A, s.def.B, s.def.research ? '<span class="tag">solo ricerca</span>' : '')).join('')}</div>` : ''; };
+    const pf = Sc.prefs(S.answers);
+    const prefHTML = `<div class="sec"><h2>Formato sociale preferito</h2>${pf.map(p => !p.avail ? `<div class="sc"><div class="hd"><span class="nm">${esc(p.def.label)}</span></div><div class="na">Non ancora disponibile: servono entrambe le risposte della coppia.</div></div>` :
+      `<div class="sc"><div class="hd"><span class="nm">${esc(p.def.label)}</span><span class="val">${Math.round(p.score)}/100</span></div><div class="ds">Indice di preferenza relativa: 50 = nessuna preferenza.</div>
+      <div class="track"><div class="mk" data-l="${p.score.toFixed(1)}" style="left:50%"></div></div><div class="poles"><span>${esc(p.def.A)}</span><span>${esc(p.def.B)}</span></div>
+      <div class="band">${esc(bandTxt({ avail: true, score: p.score }, p.def.A, p.def.B))} <span class="tag">${p.a} vs ${p.b}</span></div></div>`).join('')}</div>`;
+    const hasA4 = pf.some(p => p.avail);
+    return `<div class="card"><div class="kicker">In sintesi</div><p class="summary-lead" style="margin-top:6px">${lead}</p>
+      <p class="small muted" style="margin:0">Fasce descrittive provvisorie (0–33, 34–66, 67–100): non ci sono ancora norme, quindi niente percentili né giudizi. Il questionario non è ancora validato.</p></div>
+      ${sec(['A1'], 'Personalità')}${sec(['A2'], 'Socialità e novità')}${sec(['A3'], 'Abilità percepite')}${hasA4 || S.selected.includes('A4') ? prefHTML : ''}`;
+  }
+  function casaTab() {
+    const h = Sc.home(S.answers), any = h.some(a => a.live.avail || a.ideal.avail) || S.answers.FU1 != null || S.answers.IMP1 != null;
+    if (!any) return `<div class="card"><h2>Ancora niente da mostrare</h2><p>Completa i blocchi B1 (come vivo) e B3 (casa ideale) per vedere il tuo profilo casa.</p></div>`;
+    const dots = v => `<span class="dots">${[1, 2, 3, 4, 5].map(i => `<i class="${v >= i ? 'on' : ''}"></i>`).join('')}</span>`;
+    const cards = h.map(a => {
+      const l = a.live, i = a.ideal, ar = a.def;
+      const mk = (s, cls) => s.avail ? `<div class="mk ${cls}" data-l="${s.score.toFixed(1)}" style="left:50%"></div>` : '';
+      const line = (t, s) => s.avail ? `${t}: <b>${Math.round(s.score)}</b>` : `${t}: <span class="na">n.d. (${s.n}/${s.total})</span>`;
+      const gap = l.avail && i.avail ? Math.abs(l.score - i.score) : null;
+      return `<div class="sc"><div class="hd"><span class="nm">${esc(ar.d)} · ${esc(ar.name)}</span>${a.imp ? `<span class="val">${dots(a.imp)}</span>` : ''}</div><div class="ds">${esc(ar.desc)}</div>
+        <div class="track">${mk(l, '')}${mk(i, 'ideal')}</div><div class="poles"><span>${esc(ar.A)}</span><span>${esc(ar.B)}</span></div>
+        <div class="band" style="font-weight:600;font-size:12.5px">● ${line('Come vivo', l)}${l.coh === 'bassa' ? ' <span class="tag bad">poco coerente</span>' : ''} &nbsp; ○ ${line('Casa ideale', i)}${i.coh === 'bassa' ? ' <span class="tag bad">poco coerente</span>' : ''}${gap != null ? ` &nbsp; <span class="tag ${gap > 40 ? 'warn' : ''}">distanza ${Math.round(gap)}</span>` : ''}</div></div>`;
+    }).join('');
+    const sm = Sc.smoking(S.answers), F1 = ['No', 'Sì, occasionalmente', 'Sì, abitualmente'], F2 = ['Solo fuori casa', 'Spazi esterni della casa', 'Anche nella mia stanza', 'Anche negli spazi comuni'], F3 = ['Divieto totale', 'Solo spazi esterni', 'Anche stanze private', 'Libero ovunque'];
+    const smoke = sm.f1 == null && sm.f3 == null ? '' : `<div class="sc"><div class="hd"><span class="nm">D3 · Fumo in casa</span>${S.answers.IMP3 ? `<span class="val">${dots(S.answers.IMP3)}</span>` : ''}</div><div class="ds">Trattato a parte con una regola categoriale, non con una barra.</div>
+      <div class="kv"><span>Fuma</span><span>${sm.f1 == null ? '—' : F1[sm.f1]}</span></div>${sm.f1 >= 1 ? `<div class="kv"><span>Dove</span><span>${sm.f2 == null ? '—' : F2[sm.f2]}</span></div>` : ''}<div class="kv"><span>Regola accettata</span><span>${sm.f3 == null ? '—' : F3[sm.f3]}</span></div></div>`;
+    const lim = S.answers.LIM1 ? `<div class="sc"><div class="nm">Su cosa fai più fatica ad adattarti</div><div class="chips">${S.answers.LIM1.map(i => `<span>${esc(byCode.LIM1.opts[i])}</span>`).join('')}</div></div>` : '';
+    return `<div class="card"><div class="kicker">Come leggere le barre</div><p style="margin:6px 0 0">● <b>Come vivo</b> e ○ <b>casa ideale</b> vanno da 0 (polo sinistro) a 100 (polo destro). I puntini a destra indicano l'importanza dell'area (1–5). La compatibilità con altre persone si calcola solo tra due profili e non è mostrata qui.</p></div><div class="sec"><h2>Le nove aree della convivenza</h2>${cards}${smoke}${lim}</div>`;
+  }
+  function interessiTab() {
+    const ints = Q.filter(q => q.fmt === 'INT4' && isAns(q));
+    if (!ints.length && S.answers.MOT1 == null) return `<div class="card"><h2>Ancora niente da mostrare</h2><p>Completa il blocco A5 per vedere i tuoi interessi.</p></div>`;
+    const lv = ['Non fa per me', 'Potrei provare', 'Mi piace', 'Passione'];
+    const sorted = ints.slice().sort((a, b) => S.answers[b.code] - S.answers[a.code]);
+    const lab = (c, arr) => S.answers[c] == null ? '<span class="na">—</span>' : arr;
+    const opts = c => stripNum(byCode[c]);
+    const sm = c => Array.isArray(S.answers[c]) ? S.answers[c].map(i => opts(c)[i]) : [];
+    return `<div class="sec"><h2>Aree di interesse</h2>${sorted.map(q => `<div class="sc" style="padding:12px 14px"><div class="hd"><span class="nm">${esc(q.construct)}</span><span class="val" style="color:${LV[[0, 2, 3, 4][S.answers[q.code]]]}">${lv[S.answers[q.code]]}</span></div>${(S.subs[q.code] || []).length ? `<div class="chips">${S.subs[q.code].map(s => `<span>${esc(s)}</span>`).join('')}</div>` : ''}</div>`).join('') || '<div class="na">—</div>'}</div>
+      <div class="sec"><h2>Motivazioni e disponibilità</h2><div class="sc">
+      <div class="kv"><span>Cosa cerchi</span><span>${lab('MOT1', sm('MOT1').join(', '))}</span></div>
+      <div class="kv"><span>Quando sei disponibile</span><span>${lab('SRV1', sm('SRV1').join(', '))}</span></div>
+      <div class="kv"><span>Spesa ideale</span><span>${lab('SRV2', esc(opts('SRV2')[S.answers.SRV2]))}</span></div>
+      <div class="kv"><span>Spesa effettiva (3 mesi)</span><span>${lab('SRV3', esc(opts('SRV3')[S.answers.SRV3]))}</span></div>
+      <div class="kv"><span>Distanza</span><span>${lab('SRV4', esc(opts('SRV4')[S.answers.SRV4]))}</span></div>
+      <div class="kv"><span>Ambito di studio o lavoro</span><span>${lab('OPP1', esc(sm('OPP1').join(', ')))}</span></div>
+      <div class="kv"><span>Interesse per opportunità</span><span>${lab('OPP2', esc(opts('OPP2')[S.answers.OPP2]))}</span></div></div></div>`;
+  }
+  function ansLabel(q) {
+    const a = S.answers[q.code]; if (a == null) return null;
+    if (q.fmt === 'TXT') return a ? esc(a) : '<em>(nessun testo)</em>';
+    if (q.fmt === 'SM') return esc(a.map(i => stripNum(q)[i]).join(' · '));
+    if (q.fmt === 'SC') return esc(stripNum(q)[a]);
+    if (q.fmt === 'INT4') return esc(C.intLabels[a]) + ((S.subs[q.code] || []).length ? ' <em>· ' + esc(S.subs[q.code].join(', ')) + '</em>' : '');
+    const lab = esc(stripNum(q)[a - 1]);
+    return `${a} · ${lab}` + (q.key === 'R' ? ` <em>(inversione → ${6 - a})</em>` : '');
+  }
+  function risposteTab() {
+    const done = Q.filter(isAns), groups = {};
+    Q.forEach(q => { if (S.answers[q.code] != null) (groups[q.block] = groups[q.block] || []).push(q); });
+    const order = ['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'C1'];
+    if (!Object.keys(groups).length) return `<div class="card"><h2>Ancora nessuna risposta</h2><p>Le risposte compariranno qui, con la possibilità di correggerle.</p></div>`;
+    return `<div class="card"><p style="margin:0">${Object.values(S.answers).length} risposte registrate. Tocca una risposta per modificarla. <b>(inversione → n)</b> indica il valore usato nel calcolo per gli item con chiave R.</p></div>` +
+      order.filter(b => groups[b]).map(b => `<div class="sec"><h2>${esc(b)} · ${esc(blockById[b].title)}</h2><div class="card" style="padding:4px 14px">${groups[b].map(q =>
+        `<button class="ans" data-edit="${q.code}"><span class="c">${esc(q.code)}${q.pilot ? '<br><span class="tag" style="margin:0">ctrl</span>' : ''}</span><span class="q">${esc(q.fmt === 'INT4' ? 'Interesse: ' + q.construct : q.text)}<span class="a">${ansLabel(q)}</span></span></button>`).join('')}</div></div>`).join('');
+  }
+  function qualitaTab(sc) {
+    const qu = Sc.quality(S, sc);
+    if (!qu.enough && !sc.some(s => s.avail && s.coh)) return `<div class="card"><h2>Ancora troppo pochi dati</h2><p>Gli indicatori di qualità compaiono quando hai risposto ai blocchi di personalità o di casa (e, se attivi, alle domande di controllo).</p></div>`;
+    const lv = { buona: ['ok', 'Nessun segnale di allarme'], cautela: ['warn', 'Da leggere con cautela'], bassa: ['bad', 'Risposte poco affidabili'] }[qu.level];
+    const scItems = sc.filter(s => s.avail && s.coh);
+    return `<div class="card"><div class="kicker">Affidabilità delle risposte</div><h2 style="margin-top:6px">${lv[1]} <span class="tag ${lv[0]}">${qu.level}</span></h2>
+      ${qu.flags.length ? `<p>${qu.flags.map(esc).join(' · ')}.</p>` : '<p>Nessuna anomalia nei controlli disponibili.</p>'}
+      <div class="note">Indicatori provvisori: soglie e regole non sono validate e vanno stimate sul campione pilota. Servono a capire se le risposte sono utilizzabili, non a giudicare la persona.</div></div>
+      <div class="sec"><h2>Indicatori</h2><div class="card" style="padding:4px 14px">${qu.items.map(i => `<div class="kv"><span>${esc(i.label)}${i.note ? `<br><span class="small" style="font-weight:500">${esc(i.note)}</span>` : ''}</span><span><span class="tag ${i.state}">${esc(i.value)}</span></span></div>`).join('') || '<div class="na" style="padding:12px 0">Nessun indicatore disponibile.</div>'}</div></div>
+      ${scItems.length ? `<div class="sec"><h2>Coerenza per scala</h2><div class="card" style="padding:4px 14px">${scItems.map(s => `<div class="kv"><span>${esc(s.def.label)}</span><span><span class="tag ${s.coh === 'alta' ? 'ok' : s.coh === 'media' ? 'warn' : 'bad'}">${s.coh}</span></span></div>`).join('')}</div></div>` : ''}`;
+  }
+  function editQ(code) {
+    const q = byCode[code]; edit = code; R = { queue: [{ t: q.fmt === 'INT4' ? 'int' : 'q', code, blk: q.block }], i: 0, sess: new Set() };
+    go('edit'); tall(false); refreshCity(q.block, 800); hud(q.block); setTop('Modifica risposta', null);
+    if (q.fmt === 'INT4') return intView(true);
+    const e = edit; qView(); edit = e; $('#nextBtn').textContent = 'Salva e torna al sommario'; view = 'edit';
+  }
+
+  function exportJSON() {
+    const sc = Sc.scales(S.answers), out = {
+      versione: '0.4', esportato: new Date().toISOString(),
+      risposte: Object.keys(S.answers).map(c => ({ codice: c, valore: S.answers[c], chiave: byCode[c].key, tempo_ms: S.times[c] || null })),
+      sottocategorie: S.subs,
+      punteggi: sc.filter(s => s.avail).map(s => ({ scala: s.def.label, punteggio: +s.score.toFixed(2), item: s.n + '/' + s.total, coerenza: s.coh })),
+      formato_sociale: Sc.prefs(S.answers).filter(p => p.avail).map(p => ({ indice: p.def.label, valore: +p.score.toFixed(2) })),
+      casa: Sc.home(S.answers).map(a => ({ area: a.def.name, come_vivo: a.live.avail ? +a.live.score.toFixed(2) : null, casa_ideale: a.ideal.avail ? +a.ideal.score.toFixed(2) : null, importanza: a.imp })),
+      qualita: Sc.quality(S, sc)
+    };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'CEnTRO_risposte_v0.4.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  /* ---------- avvio ---------- */
+  City.init($('#city'), C.blocks);
+  new ResizeObserver(() => City.resize()).observe($('#cityWrap'));
+  const cw = $('#cityWrap'); let dx = null;
+  cw.addEventListener('pointerdown', e => { if (view !== 'summary') return; dx = e.clientX; City.stopPan(); cw.setPointerCapture(e.pointerId); });
+  cw.addEventListener('pointermove', e => { if (dx == null) return; City.drag(e.clientX - dx); dx = e.clientX; });
+  cw.addEventListener('pointerup', () => dx = null);
+  $('#backBtn').onclick = back; $('#menuBtn').onclick = () => setupView();
+  window.__app = { get S() { return S; }, set S(v) { S = v; }, Sc, City, setupView, summaryView, save, startRun, get R() { return R; } };
+  setupView();
+})();
+
 </script>
 </body>
 </html>
-
-<!--nik-->
